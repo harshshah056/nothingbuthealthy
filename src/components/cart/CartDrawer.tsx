@@ -1,9 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MaterialIcon from "@/components/ui/MaterialIcon";
 import { useCart } from "@/contexts/CartContext";
 import { WHATSAPP_URL } from "@/utils/constants";
+
+// HTMLInputElement.showPicker (TS lib already includes it but Safari < 16 may not).
+// We feature-detect at runtime and fall back to .click()/focus() as a safety net.
+function openDatePicker(input: HTMLInputElement | null) {
+  if (!input) return;
+  try {
+    if (typeof input.showPicker === "function") {
+      input.showPicker();
+      return;
+    }
+  } catch {
+    // showPicker can throw if not in a user gesture or unsupported — fall through.
+  }
+  input.focus();
+  input.click();
+}
 
 function getTomorrowISO(): string {
   const d = new Date();
@@ -55,6 +71,7 @@ export default function CartDrawer() {
   const [deliveryDate, setDeliveryDate] = useState<string>(() => getTomorrowISO());
   const [notes, setNotes] = useState<string>("");
   const [notesOpen, setNotesOpen] = useState(false);
+  const dateInputRef = useRef<HTMLInputElement>(null);
 
   // Lock body scroll when drawer open
   useEffect(() => {
@@ -258,32 +275,40 @@ export default function CartDrawer() {
           <footer className="border-t border-outline-variant/40 px-5 pt-3 pb-4 shrink-0 bg-surface-container-low/40">
             {/* Date pill + add-note link in one row */}
             <div className="flex items-center gap-2 mb-3">
-              <label
-                htmlFor="delivery-date"
-                className="flex-1 relative flex items-center gap-2 px-3 py-2 rounded-full bg-surface-container-lowest border border-outline-variant cursor-pointer hover:border-primary/60 transition-colors"
+              <button
+                type="button"
+                onClick={() => openDatePicker(dateInputRef.current)}
+                aria-label={`Delivery date: ${formatDateForDisplay(deliveryDate)}. Tap to change.`}
                 title="Earliest delivery is tomorrow — bowls are cut at 4 AM."
+                className="flex-1 min-w-0 flex items-center gap-2 px-3 py-2 rounded-full bg-surface-container-lowest border border-outline-variant hover:border-primary/60 transition-colors cursor-pointer text-left"
               >
                 <MaterialIcon
                   icon="calendar_today"
                   className="text-primary shrink-0"
                   size="16px"
                 />
-                <span className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant">
+                <span className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant shrink-0">
                   Deliver
                 </span>
                 <span className="text-sm font-bold text-on-surface truncate flex-1">
                   {formatDateForDisplay(deliveryDate)}
                 </span>
-                <input
-                  id="delivery-date"
-                  type="date"
-                  min={minDate}
-                  value={deliveryDate}
-                  onChange={(e) => setDeliveryDate(e.target.value)}
-                  className="absolute inset-0 opacity-0 cursor-pointer"
-                  aria-label="Delivery date"
-                />
-              </label>
+              </button>
+              {/* Native date input lives outside the button (HTML doesn't allow
+                  inputs nested in buttons). Visually hidden but kept in the
+                  accessibility tree so screen readers and keyboard users
+                  retain a real <input type="date">. */}
+              <input
+                ref={dateInputRef}
+                id="delivery-date"
+                type="date"
+                min={minDate}
+                value={deliveryDate}
+                onChange={(e) => setDeliveryDate(e.target.value)}
+                className="sr-only"
+                tabIndex={-1}
+                aria-hidden="true"
+              />
               <button
                 type="button"
                 onClick={() => setNotesOpen((v) => !v)}
