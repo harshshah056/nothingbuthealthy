@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import MaterialIcon from "@/components/ui/MaterialIcon";
 import VegBadge from "@/components/ui/VegBadge";
 import { useCart } from "@/contexts/CartContext";
@@ -430,13 +431,12 @@ export default function MenuContent() {
                 <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4 tracking-tight">
                   Pair a bowl with a juice. Save 15%.
                 </h2>
-                <p className="text-white/80 mb-6 max-w-md">
-                  Mix any fruit bowl with any cold-pressed juice and we&apos;ll
-                  knock 15% off your daily order. The complete morning ritual.
+                <p className="text-white/80 max-w-md">
+                  Add at least one fruit bowl <strong>and</strong> one
+                  cold-pressed juice to your cart and the 15% combo discount
+                  applies <strong>automatically</strong> at checkout. The
+                  complete morning ritual — no codes, no fuss.
                 </p>
-                <button className="px-8 py-3.5 rounded-full editorial-gradient text-white font-bold active:scale-95 transition-transform cursor-pointer">
-                  Build My Combo
-                </button>
               </div>
             </div>
 
@@ -456,9 +456,13 @@ export default function MenuContent() {
                   orders. Pause anytime.
                 </p>
               </div>
-              <button className="mt-6 w-full py-3.5 rounded-full bg-on-secondary-container text-secondary-container font-bold text-sm active:scale-95 transition-transform cursor-pointer">
-                Subscribe &amp; Save
-              </button>
+              <Link
+                href="/plans"
+                className="mt-6 w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-full bg-on-secondary-container text-secondary-container font-bold text-sm active:scale-95 transition-transform cursor-pointer"
+              >
+                Let&apos;s Start Healthy Life
+                <MaterialIcon icon="arrow_forward" size="18px" />
+              </Link>
             </div>
           </div>
         </div>

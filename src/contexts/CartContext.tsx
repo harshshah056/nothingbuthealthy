@@ -21,12 +21,24 @@ export interface CartItem {
   qty: number;
 }
 
+// Combo deal: when the cart contains at least one Fruit Bowl AND at least one
+// Juice, the customer gets 15% off automatically. Mirrors the on-page promise
+// in MenuContent ("Pair a bowl with a juice. Save 15%.").
+export const COMBO_DISCOUNT_PCT = 0.15;
+
 interface CartContextValue {
   items: CartItem[];
   addItem: (item: Omit<CartItem, "qty">) => void;
   removeItem: (id: string) => void;
   updateQty: (id: string, qty: number) => void;
   clearCart: () => void;
+  /** Pre-discount sum of every line item. */
+  subtotal: number;
+  /** Rupee value of the active combo discount (0 when not eligible). */
+  discount: number;
+  /** True when at least one bowl AND one juice are in the cart. */
+  comboDiscountActive: boolean;
+  /** Final amount payable (subtotal - discount). */
   total: number;
   itemCount: number;
   isOpen: boolean;
@@ -99,7 +111,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems([]);
   }, []);
 
-  const total = useMemo(
+  const subtotal = useMemo(
     () => items.reduce((sum, i) => sum + i.price * i.qty, 0),
     [items]
   );
@@ -108,6 +120,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [items]
   );
 
+  const comboDiscountActive = useMemo(() => {
+    const hasBowl = items.some((i) => i.category === "Fruit Bowls");
+    const hasJuice = items.some((i) => i.category === "Juices");
+    return hasBowl && hasJuice;
+  }, [items]);
+
+  const discount = useMemo(
+    () => (comboDiscountActive ? Math.round(subtotal * COMBO_DISCOUNT_PCT) : 0),
+    [comboDiscountActive, subtotal]
+  );
+
+  const total = useMemo(() => subtotal - discount, [subtotal, discount]);
+
   const value = useMemo<CartContextValue>(
     () => ({
       items,
@@ -115,6 +140,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
       removeItem,
       updateQty,
       clearCart,
+      subtotal,
+      discount,
+      comboDiscountActive,
       total,
       itemCount,
       isOpen,
@@ -123,7 +151,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
       toggle: () => setIsOpen((v) => !v),
       hydrated,
     }),
-    [items, addItem, removeItem, updateQty, clearCart, total, itemCount, isOpen, hydrated]
+    [
+      items,
+      addItem,
+      removeItem,
+      updateQty,
+      clearCart,
+      subtotal,
+      discount,
+      comboDiscountActive,
+      total,
+      itemCount,
+      isOpen,
+      hydrated,
+    ]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

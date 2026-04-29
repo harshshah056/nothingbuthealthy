@@ -33,10 +33,23 @@ export default function CartDrawer() {
     removeItem,
     updateQty,
     clearCart,
+    subtotal,
+    discount,
+    comboDiscountActive,
     total,
     itemCount,
     hydrated,
   } = useCart();
+
+  const hasBowl = items.some((i) => i.category === "Fruit Bowls");
+  const hasJuice = items.some((i) => i.category === "Juices");
+  // Show a nudge only when the cart has items of one type but not the other —
+  // i.e. customer is one tap away from unlocking the 15% combo discount.
+  const showComboNudge =
+    items.length > 0 && !comboDiscountActive && (hasBowl || hasJuice);
+  const nudgeLabel = hasBowl
+    ? "Add any cold-pressed juice to unlock 15% off your order."
+    : "Add any fruit bowl to unlock 15% off your order.";
 
   const [minDate] = useState<string>(() => getTomorrowISO());
   const [deliveryDate, setDeliveryDate] = useState<string>(() => getTomorrowISO());
@@ -83,7 +96,13 @@ export default function CartDrawer() {
       );
     });
     lines.push("");
-    lines.push(`*Total: ₹${total}*`);
+    if (comboDiscountActive) {
+      lines.push(`Subtotal: ₹${subtotal}`);
+      lines.push(`Combo discount (15%): -₹${discount}`);
+      lines.push(`*Total: ₹${total}* (Bowl + Juice combo applied)`);
+    } else {
+      lines.push(`*Total: ₹${total}*`);
+    }
     if (notes.trim()) {
       lines.push("");
       lines.push(`*Notes:* ${notes.trim()}`);
@@ -128,7 +147,9 @@ export default function CartDrawer() {
             <p className="text-sm text-on-surface-variant mt-1">
               {itemCount === 0
                 ? "Your cart is empty"
-                : `${itemCount} item${itemCount === 1 ? "" : "s"} · ₹${total}`}
+                : `${itemCount} item${itemCount === 1 ? "" : "s"} · ₹${total}${
+                    comboDiscountActive ? " (combo 15% off)" : ""
+                  }`}
             </p>
           </div>
           <button
@@ -143,6 +164,25 @@ export default function CartDrawer() {
 
         {/* Items */}
         <div className="flex-1 overflow-y-auto px-6 py-4">
+          {comboDiscountActive && (
+            <div className="mb-4 p-4 rounded-2xl bg-tertiary-container/60 text-on-tertiary-container flex items-start gap-3">
+              <MaterialIcon icon="celebration" filled size="22px" />
+              <div className="text-sm leading-relaxed">
+                <p className="font-extrabold">Combo unlocked — 15% off</p>
+                <p className="opacity-80">
+                  You&apos;re saving <strong>₹{discount}</strong> on this order.
+                </p>
+              </div>
+            </div>
+          )}
+          {showComboNudge && (
+            <div className="mb-4 p-4 rounded-2xl bg-secondary-container/70 text-on-secondary-container flex items-start gap-3">
+              <MaterialIcon icon="local_offer" filled size="22px" />
+              <p className="text-sm leading-relaxed">
+                <span className="font-extrabold">Save 15%.</span> {nudgeLabel}
+              </p>
+            </div>
+          )}
           {items.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-center py-20">
               <MaterialIcon
@@ -270,11 +310,25 @@ export default function CartDrawer() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between mb-4 px-1">
-              <span className="text-on-surface-variant text-sm">Total</span>
-              <span className="text-2xl font-extrabold text-primary tracking-tighter">
-                ₹{total}
-              </span>
+            <div className="space-y-1.5 mb-4 px-1">
+              {comboDiscountActive && (
+                <>
+                  <div className="flex items-center justify-between text-sm text-on-surface-variant">
+                    <span>Subtotal</span>
+                    <span>₹{subtotal}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm text-tertiary font-bold">
+                    <span>Combo discount (15%)</span>
+                    <span>-₹{discount}</span>
+                  </div>
+                </>
+              )}
+              <div className="flex items-center justify-between pt-1">
+                <span className="text-on-surface-variant text-sm">Total</span>
+                <span className="text-2xl font-extrabold text-primary tracking-tighter">
+                  ₹{total}
+                </span>
+              </div>
             </div>
 
             <button
