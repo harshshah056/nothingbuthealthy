@@ -6,6 +6,7 @@ import {
   INSTAGRAM_HANDLE,
   WHATSAPP_URL,
   WHATSAPP_DISPLAY,
+  asset,
 } from "@/utils/constants";
 
 export default function Footer() {
@@ -15,7 +16,7 @@ export default function Footer() {
         <div className="col-span-2 space-y-4">
           <Link href="/" className="inline-flex items-center gap-3" aria-label="Nothing But Healthy – Home">
             <Image
-              src="/logo.png"
+              src={asset("/logo.png")}
               alt="Nothing But Healthy logo"
               width={64}
               height={64}

@@ -30,10 +30,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Building for the GitHub Pages project URL:
+      #   https://harshshah056.github.io/nothingbuthealthy/
+      #
+      # When the custom domain `nothingbuthealthy.in` is live (DNS configured
+      # AND custom domain set in repo Settings -> Pages), switch back to the
+      # custom-domain build by:
+      #   1. removing the two env vars below
+      #   2. re-adding `public/CNAME` containing `nothingbuthealthy.in`
       - name: Build (static export)
         run: npm run build
         env:
           NODE_ENV: production
+          NEXT_PUBLIC_BASE_PATH: /nothingbuthealthy
+          NEXT_PUBLIC_SITE_URL: https://harshshah056.github.io/nothingbuthealthy
 
       - name: Add .nojekyll
         run: touch out/.nojekyll

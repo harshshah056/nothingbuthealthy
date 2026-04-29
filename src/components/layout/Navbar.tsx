@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import MaterialIcon from "../ui/MaterialIcon";
-import { NAV_LINKS } from "@/utils/constants";
+import { NAV_LINKS, asset } from "@/utils/constants";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -27,7 +27,7 @@ export default function Navbar() {
             </button>
             <Link href="/" className="flex items-center gap-3 group" aria-label="Nothing But Healthy – Home">
               <Image
-                src="/logo.png"
+                src={asset("/logo.png")}
                 alt="Nothing But Healthy logo"
                 width={56}
                 height={56}
@@ -76,7 +76,7 @@ export default function Navbar() {
                 aria-label="Nothing But Healthy – Home"
               >
                 <Image
-                  src="/logo.png"
+                  src={asset("/logo.png")}
                   alt="Nothing But Healthy logo"
                   width={48}
                   height={48}
