@@ -7,6 +7,7 @@ import BottomNav from "@/components/layout/BottomNav";
 import WhatsAppFAB from "@/components/layout/WhatsAppFAB";
 import CartButton from "@/components/cart/CartButton";
 import CartDrawer from "@/components/cart/CartDrawer";
+import CartToast from "@/components/cart/CartToast";
 import { CartProvider } from "@/contexts/CartContext";
 import { SITE_URL, COMPANY_INFO, WHATSAPP_DISPLAY, INSTAGRAM_URL } from "@/utils/constants";
 
@@ -193,6 +194,7 @@ export default function RootLayout({
           <WhatsAppFAB />
           <CartButton />
           <CartDrawer />
+          <CartToast />
         </CartProvider>
       </body>
     </html>

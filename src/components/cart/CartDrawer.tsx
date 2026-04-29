@@ -162,27 +162,23 @@ export default function CartDrawer() {
           </button>
         </header>
 
+        {/* Compact combo banners — sit just under the header without eating the
+            items area on small screens. */}
+        {comboDiscountActive && (
+          <div className="mx-6 mt-3 px-3 py-2 rounded-full bg-tertiary-container/70 text-on-tertiary-container flex items-center gap-2 text-xs font-bold shrink-0">
+            <MaterialIcon icon="celebration" filled size="16px" />
+            <span>Combo unlocked — saving ₹{discount} (15% off)</span>
+          </div>
+        )}
+        {showComboNudge && (
+          <div className="mx-6 mt-3 px-3 py-2 rounded-full bg-secondary-container/70 text-on-secondary-container flex items-center gap-2 text-xs font-bold shrink-0">
+            <MaterialIcon icon="local_offer" filled size="16px" />
+            <span>Save 15%: {nudgeLabel}</span>
+          </div>
+        )}
+
         {/* Items */}
         <div className="flex-1 overflow-y-auto px-6 py-4">
-          {comboDiscountActive && (
-            <div className="mb-4 p-4 rounded-2xl bg-tertiary-container/60 text-on-tertiary-container flex items-start gap-3">
-              <MaterialIcon icon="celebration" filled size="22px" />
-              <div className="text-sm leading-relaxed">
-                <p className="font-extrabold">Combo unlocked — 15% off</p>
-                <p className="opacity-80">
-                  You&apos;re saving <strong>₹{discount}</strong> on this order.
-                </p>
-              </div>
-            </div>
-          )}
-          {showComboNudge && (
-            <div className="mb-4 p-4 rounded-2xl bg-secondary-container/70 text-on-secondary-container flex items-start gap-3">
-              <MaterialIcon icon="local_offer" filled size="22px" />
-              <p className="text-sm leading-relaxed">
-                <span className="font-extrabold">Save 15%.</span> {nudgeLabel}
-              </p>
-            </div>
-          )}
           {items.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-center py-20">
               <MaterialIcon

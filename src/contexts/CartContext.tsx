@@ -26,6 +26,15 @@ export interface CartItem {
 // in MenuContent ("Pair a bowl with a juice. Save 15%.").
 export const COMBO_DISCOUNT_PCT = 0.15;
 
+/** Lightweight notification fired every time an item is added to the cart.
+ * `nonce` increments on every addItem call so consumers can detect duplicates
+ * (e.g. tapping the same item twice still re-triggers the toast). */
+export interface CartToast {
+  title: string;
+  qty: number;
+  nonce: number;
+}
+
 interface CartContextValue {
   items: CartItem[];
   addItem: (item: Omit<CartItem, "qty">) => void;
@@ -46,6 +55,8 @@ interface CartContextValue {
   close: () => void;
   toggle: () => void;
   hydrated: boolean;
+  /** Most recent add-to-cart notification (null until first add). */
+  toast: CartToast | null;
 }
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -54,6 +65,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const [toast, setToast] = useState<CartToast | null>(null);
 
   // Hydrate from localStorage on mount.
   // Calling setState inside this effect is intentional: it's the documented
@@ -84,16 +96,23 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items, hydrated]);
 
   const addItem = useCallback((item: Omit<CartItem, "qty">) => {
+    let nextQty = 1;
     setItems((current) => {
       const existing = current.find((i) => i.id === item.id);
       if (existing) {
+        nextQty = existing.qty + 1;
         return current.map((i) =>
-          i.id === item.id ? { ...i, qty: i.qty + 1 } : i
+          i.id === item.id ? { ...i, qty: nextQty } : i
         );
       }
       return [...current, { ...item, qty: 1 }];
     });
-    setIsOpen(true);
+    // Fire a toast instead of auto-opening the drawer so users keep browsing.
+    setToast((prev) => ({
+      title: item.title,
+      qty: nextQty,
+      nonce: (prev?.nonce ?? 0) + 1,
+    }));
   }, []);
 
   const removeItem = useCallback((id: string) => {
@@ -150,6 +169,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       close: () => setIsOpen(false),
       toggle: () => setIsOpen((v) => !v),
       hydrated,
+      toast,
     }),
     [
       items,
@@ -164,6 +184,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       itemCount,
       isOpen,
       hydrated,
+      toast,
     ]
   );
 
