@@ -1,20 +1,27 @@
 import type { NextConfig } from "next";
 
-const repo = "nothingbuthealthy";
-const isProd = process.env.NODE_ENV === "production";
+// Deployment configuration.
+//
+// Default: deploy to the custom domain `nothingbuthealthy.in` (root path),
+// which matches `SITE_URL` in `src/utils/constants.ts` and every canonical /
+// JSON-LD URL on the site.
+//
+// To deploy at a sub-path (e.g. `<username>.github.io/nothingbuthealthy/`),
+// set `NEXT_PUBLIC_BASE_PATH=/nothingbuthealthy` in the build environment AND
+// update `SITE_URL` to match — otherwise canonicals will not resolve.
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 const nextConfig: NextConfig = {
   output: "export",
   trailingSlash: true,
-  basePath: isProd ? `/${repo}` : "",
-  assetPrefix: isProd ? `/${repo}/` : "",
+  basePath: basePath || undefined,
+  assetPrefix: basePath ? `${basePath}/` : undefined,
   images: {
     unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "lh3.googleusercontent.com",
-        pathname: "/aida-public/**",
+        hostname: "images.unsplash.com",
       },
     ],
   },

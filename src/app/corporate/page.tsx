@@ -1,21 +1,69 @@
-"use client";
-
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import MaterialIcon from "@/components/ui/MaterialIcon";
-import { WHATSAPP_URL, WHATSAPP_DISPLAY } from "@/utils/constants";
+import { WHATSAPP_URL, WHATSAPP_DISPLAY, SITE_URL } from "@/utils/constants";
+
+export const metadata: Metadata = {
+  title: "Corporate Tiffin & Office Catering in Ahmedabad – From ₹199/meal",
+  description:
+    "Wholesome chef-crafted corporate tiffins delivered daily to offices, co-working spaces & gyms across Ahmedabad. Bulk discounts from ₹199/meal. Flexible scheduling, macro-tracking, zero lock-ins. 500+ healthy workplaces trust us.",
+  alternates: {
+    canonical: `${SITE_URL}/corporate/`,
+  },
+  openGraph: {
+    title: "Corporate Tiffin & Office Meal Delivery in Ahmedabad | Nothing But Healthy",
+    description:
+      "Keep your Ahmedabad team energized with farm-fresh vegetarian corporate tiffins. Bulk pricing from ₹199/meal. Flexible scheduling, nutritional transparency, and zero lock-ins.",
+    url: `${SITE_URL}/corporate/`,
+  },
+};
+
+const corporateSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Corporate Tiffin & Office Catering – Ahmedabad",
+  description:
+    "Chef-crafted vegetarian corporate tiffins and office meal delivery service across Ahmedabad. Bulk pricing, flexible scheduling, macro-tracking, and nutritional transparency.",
+  provider: {
+    "@type": "Organization",
+    name: "Nothing But Healthy",
+    url: SITE_URL,
+  },
+  areaServed: {
+    "@type": "City",
+    name: "Ahmedabad",
+  },
+  serviceType: "Corporate Meal Delivery",
+  offers: {
+    "@type": "Offer",
+    price: "199",
+    priceCurrency: "INR",
+    description: "Corporate tiffin meal pricing starting at ₹199/meal for large teams",
+    priceSpecification: {
+      "@type": "UnitPriceSpecification",
+      price: "199",
+      priceCurrency: "INR",
+      unitText: "per meal",
+    },
+  },
+};
 
 export default function CorporatePage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(corporateSchema) }}
+      />
       {/* Hero Section */}
-      <section className="relative px-6 md:px-12 mb-20 overflow-hidden">
-        <div className="flex flex-col lg:flex-row gap-12 items-center max-w-7xl mx-auto">
+      <section className="relative px-6 md:px-12 mb-12 md:mb-20 overflow-hidden">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center max-w-7xl mx-auto">
           <div className="lg:w-1/2 z-10">
             <span className="inline-block px-4 py-1.5 rounded-full bg-tertiary-container text-on-tertiary-container font-bold text-[10px] uppercase tracking-widest mb-6">
               Fuel Your Team
             </span>
-            <h1 className="text-5xl md:text-7xl leading-[1.05] font-extrabold text-on-background mb-8 tracking-tighter">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl leading-[1.05] font-extrabold text-on-background mb-8 tracking-tighter">
               The Corporate{" "}
               <span className="text-primary italic">Fuel Station.</span>
             </h1>
@@ -45,8 +93,8 @@ export default function CorporatePage() {
           <div className="lg:w-1/2 relative">
             <div className="relative aspect-square overflow-hidden rounded-[2rem] rotate-2 hover:rotate-0 transition-transform duration-500 shadow-2xl">
               <Image
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmp7DR8jO78Q-02txlyjFZmne-wzZYPYWxzyNdsR032wzk8wJSMPyA-l5vAf3LAZqBD-fFj3fyVTvLNRohtrmAj6HZGDGzrzkH7kQfPGnlCTDcRGigMZfBIRabyluNie6zClaUBKkhHziH-_CicVBlMqkKzi8oXalxe4tPRh4HiJAxPhtNJGoAbHaK7nKNcsNlIGeZHnJQl5Z4QJ3fbyRdVmamh33_-e28MMvw7BbwrzmxW7zC3GkH_o26WxWMwiFEvrgDQKyjFY3D"
-                alt="Corporate healthy meal spread with salads and bowls"
+                src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=1200&h=1200&fit=crop&auto=format&q=80"
+                alt="Corporate healthy meal spread of fruit bowls with banana, papaya, pomegranate and chia seeds — delivered to Ahmedabad offices by Nothing But Healthy"
                 fill
                 unoptimized
                 className="object-cover"
@@ -64,14 +112,14 @@ export default function CorporatePage() {
       </section>
 
       {/* Benefits Bento Grid */}
-      <section className="py-24 px-6 md:px-12">
+      <section className="py-16 md:py-24 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-4xl font-extrabold mb-16 tracking-tighter">
             Why Partner With Us?
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="md:col-span-2 bg-surface-container-low rounded-3xl p-10 relative overflow-hidden">
+            <div className="md:col-span-2 bg-surface-container-low rounded-3xl p-6 md:p-10 relative overflow-hidden">
               <MaterialIcon
                 icon="workspace_premium"
                 className="text-primary mb-4"
@@ -92,7 +140,7 @@ export default function CorporatePage() {
               </div>
             </div>
 
-            <div className="bg-secondary-container rounded-3xl p-10">
+            <div className="bg-secondary-container rounded-3xl p-6 md:p-10">
               <MaterialIcon
                 icon="calendar_month"
                 className="text-on-secondary-container mb-4"
@@ -107,7 +155,7 @@ export default function CorporatePage() {
               </p>
             </div>
 
-            <div className="bg-surface-container-lowest rounded-3xl p-10 border border-outline-variant/10">
+            <div className="bg-surface-container-lowest rounded-3xl p-6 md:p-10 border border-outline-variant/10">
               <MaterialIcon
                 icon="analytics"
                 className="text-tertiary mb-4"
@@ -121,7 +169,7 @@ export default function CorporatePage() {
               </p>
             </div>
 
-            <div className="md:col-span-2 bg-primary text-on-primary rounded-3xl p-10 overflow-hidden">
+            <div className="md:col-span-2 bg-primary text-on-primary rounded-3xl p-6 md:p-10 overflow-hidden">
               <div className="flex flex-col md:flex-row gap-8 items-center">
                 <div className="flex-1">
                   <MaterialIcon
@@ -147,8 +195,8 @@ export default function CorporatePage() {
                   </Link>
                 </div>
                 <Image
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMZGJ9Mf8iM9R6hr3v_Xq_wXqfbRqiFiCW2TA0rirsBo6ogmS4jbbZMhx5AvhgpV6W-hrJ-XI0BafV4CDvjEHJ3JICZ5_ErkbLGhusM4rxODrEnsjsF8St5lm8lKgVooPT6O-E6Rf5j1UE74X6HF9pDzzByltCZDfd_jqzR7Zll8fiF6DO-nDzpw23yWS3nKtRKdxBcr3Ugu5LafJfHxGqyLGLqWFiivlAiHFCoCWdlp7kOzlsY0aRDEgwmKMxEZlZcp7ibTrR9dbf"
-                  alt="Team enjoying healthy meals together"
+                  src="https://images.unsplash.com/photo-1564834744159-ff0ea41ba4b9?w=600&h=600&fit=crop&auto=format&q=80"
+                  alt="Bulk healthy fruit bowls and cold-pressed juices delivered to Ahmedabad offices by Nothing But Healthy"
                   width={280}
                   height={280}
                   unoptimized
@@ -161,7 +209,7 @@ export default function CorporatePage() {
       </section>
 
       {/* Inquiry Form Section */}
-      <section id="inquiry" className="py-24 px-6 md:px-12 bg-surface-container-low">
+      <section id="inquiry" className="py-16 md:py-24 px-6 md:px-12 bg-surface-container-low">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16">
           <div className="lg:w-1/3">
             <h2 className="text-[2.5rem] font-bold tracking-tight mb-6 leading-tight">

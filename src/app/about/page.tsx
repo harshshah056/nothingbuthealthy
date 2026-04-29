@@ -1,100 +1,376 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import MaterialIcon from "@/components/ui/MaterialIcon";
+import { SITE_URL } from "@/utils/constants";
+
+export const metadata: Metadata = {
+  title: "Our Story – From the Heart of Gujarat | Nothing But Healthy",
+  description:
+    "Born in an Ahmedabad kitchen and rooted in Gujarat's farm heritage. Nothing But Healthy is a daily fruit bowl & cold-pressed juice subscription crafted from Valsad alphonsos, Saurashtra pomegranates and farm-fresh produce sourced across Gujarat.",
+  alternates: {
+    canonical: `${SITE_URL}/about/`,
+  },
+  openGraph: {
+    title: "Our Story – From the Heart of Gujarat | Nothing But Healthy",
+    description:
+      "Born in Ahmedabad, sourced across Gujarat. The story behind Ahmedabad's freshest fruit bowl and cold-pressed juice subscription.",
+    url: `${SITE_URL}/about/`,
+  },
+};
+
+const aboutPageSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+        { "@type": "ListItem", position: 2, name: "About", item: `${SITE_URL}/about/` },
+      ],
+    },
+    {
+      "@type": "AboutPage",
+      name: "About Nothing But Healthy – From the Heart of Gujarat",
+      url: `${SITE_URL}/about/`,
+      description:
+        "Nothing But Healthy is a daily fruit bowl and cold-pressed juice subscription founded in Ahmedabad and sourced from across Gujarat — Valsad, Saurashtra, Banaskantha, Junagadh and Kutch.",
+      mainEntity: {
+        "@type": "Organization",
+        name: "Nothing But Healthy",
+        foundingLocation: {
+          "@type": "Place",
+          name: "Ahmedabad, Gujarat, India",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Ahmedabad",
+            addressRegion: "Gujarat",
+            addressCountry: "IN",
+          },
+        },
+        knowsAbout: [
+          "Vegetarian nutrition",
+          "Ayurvedic cooking",
+          "Cold-pressed juicing",
+          "Farm-fresh fruit subscriptions",
+          "Gujarat-sourced produce",
+          "Sattvic food tradition",
+        ],
+        slogan: "From the heart of Gujarat. Delivered fresh, every morning.",
+      },
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "Where is Nothing But Healthy based?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Nothing But Healthy is based in Ahmedabad, Gujarat. Our cloud kitchen is in the heart of the city and we deliver across all major Ahmedabad pin codes every morning before 9 AM.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Where do you source your fruits and ingredients from?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Every ingredient is sourced from within Gujarat. Alphonso mangoes from Valsad, pomegranates from Saurashtra, papaya from local cooperatives, dates from Kutch, fresh tender coconut and bananas from south Gujarat, and dairy malai from Banaskantha — India's largest dairy belt.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "What makes Gujarat ideal for healthy fresh produce?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Gujarat has India's longest growing season, multiple agro-climatic zones, and a centuries-old tradition of vegetarian, Ayurvedic, sattvic eating. The state is one of India's largest producers of mango, banana, papaya, sugarcane and chickoo — the building blocks of our fruit bowls and juices.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "What is your founding philosophy?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "We started with a simple belief: when food is honest, the body thrives. Every recipe blends modern nutrition science with the Ayurvedic and sattvic principles that have shaped Gujarati cooking for centuries.",
+          },
+        },
+      ],
+    },
+  ],
+};
+
+const sourcingRegions = [
+  {
+    region: "Valsad",
+    crop: "Alphonso & Kesar mangoes",
+    season: "Mar – Jun",
+    icon: "park",
+  },
+  {
+    region: "Saurashtra",
+    crop: "Pomegranates, chickoo & guava",
+    season: "Year-round",
+    icon: "spa",
+  },
+  {
+    region: "Banaskantha",
+    crop: "Tender coconut malai & dairy",
+    season: "Year-round",
+    icon: "agriculture",
+  },
+  {
+    region: "Junagadh",
+    crop: "Kesar mangoes & mosambi",
+    season: "Mar – Aug",
+    icon: "eco",
+  },
+  {
+    region: "Kutch",
+    crop: "Dates, watermelon & muskmelon",
+    season: "Apr – Sep",
+    icon: "wb_sunny",
+  },
+  {
+    region: "South Gujarat",
+    crop: "Papaya, banana & sugarcane",
+    season: "Year-round",
+    icon: "grass",
+  },
+];
+
+const gujaratEdge = [
+  {
+    title: "India's Vegetarian Heart",
+    description:
+      "Gujarat has the highest share of vegetarian households in India. Plant-first eating isn't a trend here — it's a 600-year-old way of life.",
+    icon: "favorite",
+  },
+  {
+    title: "365 Days of Sunshine",
+    description:
+      "Multiple agro-climatic zones across the state mean something is always in season. Our menus rotate naturally with what each region is harvesting.",
+    icon: "wb_sunny",
+  },
+  {
+    title: "Ayurvedic & Sattvic Wisdom",
+    description:
+      "From Lothal to Lakhpat, Gujarat's food traditions are rooted in Ayurveda and sattvic principles. We bring those into a modern, ready-to-eat format.",
+    icon: "auto_stories",
+  },
+];
 
 export default function AboutPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutPageSchema) }}
+      />
+
       {/* Hero */}
-      <section className="px-6 md:px-12 mb-24">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center max-w-7xl mx-auto">
+      <section className="px-6 md:px-12 mb-16 md:mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center max-w-7xl mx-auto">
           <div className="md:col-span-7">
             <p className="text-primary font-bold uppercase text-xs tracking-[0.2em] mb-6">
-              Our Essence
+              Born in Ahmedabad · Sourced from across Gujarat
             </p>
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter leading-[1.05] mb-8">
-              Freshness is a{" "}
-              <span className="text-primary italic">Philosophy.</span>
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tighter leading-[1.05] mb-8">
+              From the{" "}
+              <span className="text-primary italic">heart of Gujarat</span>,
+              with intention.
             </h1>
-            <p className="text-on-surface-variant text-lg leading-relaxed max-w-xl">
-              We don&apos;t just make meals — we cultivate a way of living. Every
-              leaf, every grain, every drizzle of cold-pressed oil is chosen with
-              the same care you&apos;d bring to your own kitchen. Nothing But
-              Healthy was born from a simple belief: when food is honest, the
-              body thrives.
+            <p className="text-on-surface-variant text-lg leading-relaxed max-w-xl mb-8">
+              We didn&apos;t start a meal-delivery company — we started a love
+              letter to Gujarat&apos;s food heritage. Every alphonso, every
+              ginger root, every drop of cold-pressed sugarcane comes from
+              within our state. Hand-picked. Hand-cut. Honest.
             </p>
+            <div className="flex flex-wrap gap-3">
+              <span className="inline-block px-4 py-1.5 rounded-full bg-tertiary-container text-on-tertiary-container font-bold text-xs uppercase tracking-wider">
+                100% Vegetarian
+              </span>
+              <span className="inline-block px-4 py-1.5 rounded-full bg-secondary-container text-on-secondary-container font-bold text-xs uppercase tracking-wider">
+                Sourced in Gujarat
+              </span>
+              <span className="inline-block px-4 py-1.5 rounded-full bg-primary-container text-on-primary-container font-bold text-xs uppercase tracking-wider">
+                Ayurvedic-Inspired
+              </span>
+            </div>
           </div>
           <div className="md:col-span-5">
-            <Image
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgaGUu1RI8iPp-wlb1R85f-9qd_tdV9hShaQKkr8-xsTnFhw7MMf3GXXfIgu_Edrnwa3c6Hi8oNYNT5W2YrX6PrjOTs6p6SUtX_crO2d2A4FgcwwILuux1-d5WVGydutyjbkWJ4tfnJCUoVEEr8_7-w0TNeV0rV73roNYQ1n6csyTVOGKWYZfQG6p2r2V1Q3_u4NzlCijvsdlL2rYF1iF5Bdld0DnCse72Ll39qekDlb21eqqVp-w9OYYYuEv64dTsjQ5wlThY7x83"
-              alt="Fresh salad bowl with vibrant greens and seasonal produce"
-              width={600}
-              height={700}
-              unoptimized
-              className="w-full h-auto organic-shape mix-blend-multiply opacity-90"
-            />
+            <div className="relative aspect-[5/6] overflow-hidden rounded-[2rem] shadow-2xl">
+              <Image
+                src="https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=900&h=1100&fit=crop&auto=format&q=80"
+                alt="Hand-picked Valsad alphonso mangoes — sourced for Nothing But Healthy fruit bowls in Ahmedabad"
+                fill
+                unoptimized
+                className="object-cover"
+                priority
+              />
+              <div className="absolute bottom-0 inset-x-0 p-6 bg-gradient-to-t from-black/70 to-transparent">
+                <p className="text-white text-xs uppercase tracking-widest font-bold mb-1">
+                  In season
+                </p>
+                <p className="text-white font-extrabold text-lg">
+                  Valsad Alphonso · Hand-picked at peak ripeness
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Founder's Story */}
-      <section className="bg-surface-container-low py-24 px-6 md:px-12">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <Image
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDvdGv_xtjP4Ksys7pYQutVsyg3aHXnkdnsMX7_RcLuFVKyftsnYFCGtC9hevzmOnMwYQ18OsLEj4jXd1RSSnvBC8n-LfvpIvFStdojX94J-u5l8bAerdFhAL-19ryHRkL7n7GoDt1ilGT14w7QWdRi68PUf_cge4tTF_DzqhtlY4jR9kg_2CjOpiUyCYYPw6r_HWkJQSgaaKvFkjU0W3_aLNg97Dc0crz8rEBKMh09XC25wjIyoLIwXEcsa1za6FwhEW77P2GRT0M"
-            alt="Founder in the kitchen crafting a fresh meal"
-            width={600}
-            height={600}
-            unoptimized
-            className="w-full aspect-square object-cover rounded-[2rem]"
-          />
+      <section className="bg-surface-container-low py-16 md:py-24 px-6 md:px-12">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+          <div className="relative aspect-square rounded-[2rem] overflow-hidden">
+            <Image
+              src="https://images.unsplash.com/photo-1746783840949-8bc54f8220d1?w=900&h=900&fit=crop&auto=format&q=80"
+              alt="Colourful fresh fruit platter with watermelon, papaya, kiwi and seasonal fruits — the simple breakfast that started Nothing But Healthy in Ahmedabad"
+              fill
+              unoptimized
+              className="object-cover"
+            />
+          </div>
           <div>
+            <p className="text-primary font-bold uppercase text-xs tracking-[0.2em] mb-4">
+              The Origin
+            </p>
             <h2 className="text-4xl font-extrabold tracking-tighter mb-6">
-              The Heart Behind the Bowl
+              It started in a small Ahmedabad kitchen.
             </h2>
             <p className="text-on-surface-variant leading-relaxed mb-6">
-              It started in a tiny Ahmedabad kitchen with a borrowed blender and
-              a conviction that eating clean shouldn&apos;t mean eating bland.
-              Our founder spent two years researching Ayurvedic nutrition,
-              visiting organic farms across Gujarat, and perfecting recipes that
-              marry authentic Indian flavors with modern dietary science.
+              A borrowed blender. A weekly trip to the APMC market in Vasna. Two
+              years spent travelling between organic farms in Valsad, dairy
+              cooperatives in Banaskantha, and Ayurvedic kitchens across
+              Gujarat. We weren&apos;t trying to build a brand — we were trying
+              to figure out what honest, modern, vegetarian food could look like
+              if it was actually made the way our grandmothers would approve of.
             </p>
             <p className="text-on-surface-variant leading-relaxed mb-8">
-              What began as meal-prepping for friends quickly became a movement.
-              Today, Nothing But Healthy serves thousands of bowls every week —
-              each one still made with the same obsessive attention to
-              freshness, balance, and joy.
+              Six months later, friends were asking us to deliver to their
+              offices. A year later, neighbours were asking for subscriptions.
+              And so Nothing But Healthy became real — built bowl by bowl, glass
+              by glass, with the same obsessive freshness we started with.
             </p>
             <blockquote className="border-l-4 border-primary pl-6 mb-10">
               <p className="italic text-lg text-on-surface leading-relaxed">
-                &ldquo;I wanted to prove that the healthiest meal in your day
-                could also be the most delicious.&rdquo;
+                &ldquo;The healthiest meal of your day should also be the one
+                you look forward to most. Anything less, and we&apos;re doing
+                something wrong.&rdquo;
               </p>
+              <footer className="text-sm text-on-surface-variant mt-3 not-italic">
+                — Founder, Nothing But Healthy
+              </footer>
             </blockquote>
-            <Link
-              href="/about"
-              className="inline-flex items-center gap-2 text-primary font-black uppercase text-sm group"
-            >
-              Read the full journey{" "}
-              <MaterialIcon
-                icon="arrow_forward"
-                className="group-hover:translate-x-1 transition-transform"
-              />
-            </Link>
           </div>
         </div>
       </section>
 
-      {/* Values Bento Grid */}
-      <section className="py-24 px-6 md:px-12">
+      {/* Why Gujarat */}
+      <section className="py-16 md:py-24 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-extrabold tracking-tighter text-center mb-16">
-            The Healthy Commitment
-          </h2>
+          <div className="text-center mb-16 max-w-2xl mx-auto">
+            <p className="text-primary font-bold uppercase text-xs tracking-[0.2em] mb-4">
+              Why Gujarat
+            </p>
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tighter mb-6">
+              The state was{" "}
+              <span className="text-primary italic">made for this</span>.
+            </h2>
+            <p className="text-on-surface-variant leading-relaxed">
+              We could ship in trendy superfoods from California. Instead, we
+              looked around — and realised we already live in one of the most
+              fertile, food-rich corners of India.
+            </p>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Zero Preservatives — col-span-2 */}
-            <div className="md:col-span-2 bg-secondary-container rounded-[2rem] p-10 flex flex-col justify-between overflow-hidden relative min-h-[360px]">
+            {gujaratEdge.map((item) => (
+              <article
+                key={item.title}
+                className="bg-surface-container-lowest rounded-[2rem] p-6 md:p-10 soft-ambient-shadow"
+              >
+                <MaterialIcon
+                  icon={item.icon}
+                  filled
+                  className="text-primary mb-6"
+                  size="40px"
+                />
+                <h3 className="text-2xl font-bold mb-4 tracking-tight">
+                  {item.title}
+                </h3>
+                <p className="text-on-surface-variant leading-relaxed">
+                  {item.description}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Sourcing Map */}
+      <section className="bg-primary-container py-16 md:py-24 px-6 md:px-12">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+            <div>
+              <p className="text-white/80 font-bold uppercase text-xs tracking-[0.2em] mb-4">
+                Our Gujarat
+              </p>
+              <h2 className="text-4xl md:text-5xl font-extrabold tracking-tighter text-white max-w-2xl">
+                Six regions. One state.
+                <br />
+                Every ingredient.
+              </h2>
+            </div>
+            <p className="text-on-primary-container leading-relaxed max-w-md">
+              Every fruit and ingredient on our menu is traceable to a specific
+              Gujarat region — and a specific season.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {sourcingRegions.map((source) => (
+              <article
+                key={source.region}
+                className="bg-white rounded-[2rem] p-8 flex flex-col gap-3"
+              >
+                <MaterialIcon
+                  icon={source.icon}
+                  filled
+                  className="text-primary"
+                  size="32px"
+                />
+                <h3 className="text-2xl font-extrabold tracking-tight">
+                  {source.region}
+                </h3>
+                <p className="text-on-surface-variant text-sm leading-relaxed flex-1">
+                  {source.crop}
+                </p>
+                <p className="text-xs uppercase tracking-widest font-bold text-primary mt-2">
+                  In season: {source.season}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* The Healthy Commitment */}
+      <section className="py-16 md:py-24 px-6 md:px-12">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-primary font-bold uppercase text-xs tracking-[0.2em] mb-4">
+              The Healthy Commitment
+            </p>
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tighter">
+              Four promises.{" "}
+              <span className="text-primary italic">Every bowl. Every juice.</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-2 bg-secondary-container rounded-[2rem] p-6 md:p-10 flex flex-col justify-between overflow-hidden relative min-h-[360px]">
               <div>
                 <MaterialIcon
                   icon="eco"
@@ -104,14 +380,14 @@ export default function AboutPage() {
                   Zero Preservatives
                 </h3>
                 <p className="text-on-secondary-container/80 leading-relaxed max-w-md">
-                  Every ingredient is sourced fresh and used within 24 hours.
-                  No stabilizers, no shelf-life tricks — just real food the way
-                  nature intended it.
+                  Every fruit is washed, cut, and bowled the same morning of
+                  delivery. Every juice is slow-pressed and bottled within an
+                  hour. No stabilizers, no shelf-life tricks — just real food.
                 </p>
               </div>
               <Image
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOfK4NK2EdbxrlcDGgG2o42btMQgG-Hk77TZ5tcE2u3AengXwJV4T1QV_zMCDgEJTXKHIsJli4Qc0i57gtzvhxBVVQNUb_RQdzHmcxxdteRHWOVxnODVrowe3SrpTBwkjq1oLY4Q9QXPRxjs-JEz6eUmsx0iF7ZMVaL45y7Q57fcrnkBvSEpFxIPmIRIJIrjNmbB5PlRKEuBRGtyRrRHKWqzktNlJR5qKOWj1KrjS0TepKV8MVWVq7x-ZL1-CVRqmRzfWaeCxVx6gP"
-                alt="Fresh lemons and rosemary on a cutting board"
+                src="https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=900&h=400&fit=crop&auto=format&q=80"
+                alt="Cold-pressed green juice with fresh ginger and lemon"
                 width={600}
                 height={200}
                 unoptimized
@@ -119,23 +395,22 @@ export default function AboutPage() {
               />
             </div>
 
-            {/* Daily Harvest */}
-            <div className="bg-surface-container-high rounded-[2rem] p-10 flex flex-col justify-between min-h-[360px]">
+            <div className="bg-surface-container-high rounded-[2rem] p-6 md:p-10 flex flex-col justify-between min-h-[360px]">
               <div>
                 <MaterialIcon
-                  icon="local_shipping"
+                  icon="schedule"
                   className="text-on-surface text-4xl mb-4"
                 />
-                <h3 className="text-2xl font-bold mb-3">Daily Harvest</h3>
+                <h3 className="text-2xl font-bold mb-3">Cut at 4 AM</h3>
                 <p className="text-on-surface-variant leading-relaxed">
-                  Our kitchen fires up before sunrise. Meals are prepped,
-                  packed, and dispatched the same morning so every bite is at
-                  peak freshness.
+                  Our kitchen lights up before sunrise. Bowls are prepared,
+                  bottled, and dispatched the same morning so every bite is at
+                  peak freshness, before 9 AM.
                 </p>
               </div>
               <Image
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxDoYhQYeJKZyz0ICufyw2XPfxrD6aG-PU1oOYV79HVDdfH07BIH7OxkwqX19MJb_BIA2IJ2Za03OV1mQLKGJUZ6SaVEQVUYFuiMxKteCODgWWmAyf7FuepHfrAxDNhcBHa0kgH3tTouolkIco5YhUOAZI9yBSbxvBxWibEDhQlNzoR6_XirvF9_xTnagI9_XKQE1HbXdXBugRzE1XQ8-eUT6iDUvog07OMFk7xq8ZSU_ifG1Ko1NlrLPog3mEOcLJ5nRl-TCWWHJH"
-                alt="Fresh vegetables and greens"
+                src="https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=600&h=600&fit=crop&auto=format&q=80"
+                alt="Freshly cut acai berry bowl prepared in Ahmedabad kitchen"
                 width={400}
                 height={400}
                 unoptimized
@@ -143,36 +418,34 @@ export default function AboutPage() {
               />
             </div>
 
-            {/* Science-Backed */}
-            <div className="bg-tertiary-container text-on-tertiary-container rounded-[2rem] p-10 flex flex-col justify-between min-h-[320px]">
+            <div className="bg-tertiary-container text-on-tertiary-container rounded-[2rem] p-6 md:p-10 flex flex-col justify-between min-h-[320px]">
               <div>
                 <MaterialIcon
                   icon="nutrition"
                   filled
                   className="text-4xl mb-4"
                 />
-                <h3 className="text-2xl font-bold mb-3">Science-Backed</h3>
+                <h3 className="text-2xl font-bold mb-3">Nutritionist-Designed</h3>
                 <p className="opacity-80 leading-relaxed">
-                  Every menu is designed with a certified nutritionist. Macro
-                  ratios, micronutrient density, and glycemic impact are
-                  balanced in every bowl.
+                  Every menu item is reviewed by a certified nutritionist. Macro
+                  ratios, micronutrient density, and glycemic load are balanced
+                  in every bowl and bottle.
                 </p>
               </div>
               <div className="flex flex-wrap gap-3 mt-6">
                 <span className="inline-block px-4 py-1.5 rounded-full bg-on-tertiary-container/10 font-bold text-xs uppercase tracking-wider">
-                  Keto Friendly
+                  Diabetic-Friendly
                 </span>
                 <span className="inline-block px-4 py-1.5 rounded-full bg-on-tertiary-container/10 font-bold text-xs uppercase tracking-wider">
-                  High Protein
+                  High Fibre
                 </span>
               </div>
             </div>
 
-            {/* Our Culinary Vision — col-span-2 */}
-            <div className="md:col-span-2 bg-surface-container-lowest shadow-sm rounded-[2rem] p-10 flex flex-col md:flex-row items-center gap-8">
+            <div className="md:col-span-2 bg-surface-container-lowest shadow-sm rounded-[2rem] p-6 md:p-10 flex flex-col md:flex-row items-center gap-8">
               <Image
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNTnBg6tV9jzXoLDsGjOHByl4PNk6ejT5auE_Hv2R0h8dHr7_RuIdDwTg5S8tCg_s1-22PSTa7NOkUhL1uXOrAlnwmdGn3qaY4Lhe6NvaX4XHwFArSuGP8oU1XJdXILPizPFt-CDT7dbcz9OnXN5D-Ee1H03vwfUDhOzSIR6dwhw2REelfUyBprpW02sOxome2wDvkaX4aGCiGBB7m-OhaVxRT1SEE10IFw5BuB724xGcQkcLW0Rwwi3XC9aW_gs5WIOEljwMzQ2f1"
-                alt="Chef hands preparing a fresh dish"
+                src="https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=400&h=400&fit=crop&auto=format&q=80"
+                alt="Hand-picked alphonso mangoes from a Valsad orchard — traceable Gujarat sourcing for Nothing But Healthy fruit bowls"
                 width={160}
                 height={160}
                 unoptimized
@@ -180,43 +453,82 @@ export default function AboutPage() {
               />
               <div>
                 <h3 className="text-2xl font-bold mb-3">
-                  Our Culinary Vision
+                  Honest, traceable, local
                 </h3>
-                <p className="text-on-surface-variant leading-relaxed">
-                  We see food as a craft, not a commodity. Our chefs draw
-                  inspiration from traditional Indian kitchens, global
-                  superfoods, and the changing seasons to create menus that
-                  nourish deeply and delight completely. The goal is simple:
-                  make the healthiest meal of your day the one you look forward
-                  to most.
+                <p className="text-on-surface-variant leading-relaxed mb-4">
+                  We can name the farm every alphonso came from. We can tell you
+                  which Banaskantha cooperative supplies our coconut malai, and
+                  which Saurashtra orchard our pomegranates ripened in. That&apos;s
+                  the standard.
                 </p>
+                <Link
+                  href="/menu"
+                  className="inline-flex items-center gap-2 text-primary font-black uppercase text-sm group"
+                >
+                  See our menu{" "}
+                  <MaterialIcon
+                    icon="arrow_forward"
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </Link>
               </div>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Mission Pull Quote */}
+      <section className="py-16 md:py-24 px-6 md:px-12 bg-surface-container-low">
+        <div className="max-w-4xl mx-auto text-center">
+          <MaterialIcon
+            icon="format_quote"
+            filled
+            className="text-primary mx-auto mb-6"
+            size="48px"
+          />
+          <p className="text-3xl md:text-4xl font-extrabold tracking-tighter leading-[1.2] text-on-background mb-8">
+            Our mission isn&apos;t to feed Ahmedabad. It&apos;s to make the
+            healthiest meal of your day{" "}
+            <span className="text-primary italic">the one you look forward to</span>{" "}
+            — and to do it with what Gujarat has been growing all along.
+          </p>
+          <Link
+            href="/plans"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-on-primary font-bold rounded-full text-base hover:scale-105 transition-transform"
+          >
+            Start Your Healthy Life
+            <MaterialIcon icon="arrow_forward" size="18px" />
+          </Link>
+        </div>
+      </section>
+
       {/* Newsletter CTA */}
-      <section className="py-24 px-6 md:px-12 mb-24">
-        <div className="max-w-5xl mx-auto bg-primary-container rounded-3xl p-12 md:p-20 text-center relative overflow-hidden">
+      <section className="py-16 md:py-24 px-6 md:px-12 mb-16 md:mb-24">
+        <div className="max-w-5xl mx-auto bg-primary-container rounded-3xl p-8 sm:p-12 md:p-20 text-center relative overflow-hidden">
           <div className="relative z-10">
             <h2 className="text-4xl md:text-5xl text-white font-extrabold mb-6 tracking-tighter">
-              Join the Conscious Living Movement
+              Join the conscious living movement.
             </h2>
             <p className="text-on-primary-container text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
-              Get weekly recipes, wellness tips, and exclusive subscriber-only
-              offers delivered straight to your inbox. No spam, just goodness.
+              Weekly seasonal recipes, sourcing stories from Gujarat&apos;s
+              farms, and subscriber-only offers — straight to your inbox. No
+              spam, just goodness.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-lg mx-auto">
+            <form className="flex flex-col sm:flex-row justify-center gap-4 max-w-lg mx-auto">
               <input
                 type="email"
+                required
                 placeholder="Your email address"
+                aria-label="Email address"
                 className="flex-1 px-6 py-4 rounded-full bg-white text-on-surface placeholder:text-outline text-base outline-none focus:ring-2 focus:ring-primary"
               />
-              <button className="px-8 py-4 bg-white text-primary font-bold rounded-full text-base hover:scale-105 transition-transform shadow-xl">
+              <button
+                type="submit"
+                className="px-8 py-4 bg-white text-primary font-bold rounded-full text-base hover:scale-105 transition-transform shadow-xl cursor-pointer"
+              >
                 Subscribe
               </button>
-            </div>
+            </form>
           </div>
           <div className="absolute -top-24 -left-24 w-64 h-64 bg-tertiary/20 rounded-full blur-3xl" />
           <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-primary/30 rounded-full blur-3xl" />

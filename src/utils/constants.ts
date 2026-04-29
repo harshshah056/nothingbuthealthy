@@ -1,3 +1,9 @@
+// Canonical site URL. Override via `NEXT_PUBLIC_SITE_URL` at build time when
+// deploying to a different domain. Must NOT include a trailing slash.
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+  "https://nothingbuthealthy.in";
+
 export const WHATSAPP_NUMBER = "919619896648";
 export const WHATSAPP_DISPLAY = "+91 96198 96648";
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;

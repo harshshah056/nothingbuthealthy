@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import MaterialIcon from "../ui/MaterialIcon";
 import {
   INSTAGRAM_URL,
@@ -12,12 +13,24 @@ export default function Footer() {
     <footer className="bg-surface-container-low py-12 px-6 hidden md:block">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="col-span-2 space-y-4">
-          <span className="font-headline text-xl font-black text-primary italic">
-            Nothing But Healthy
-          </span>
+          <Link href="/" className="inline-flex items-center gap-3" aria-label="Nothing But Healthy – Home">
+            <Image
+              src="/logo.png"
+              alt="Nothing But Healthy logo"
+              width={64}
+              height={64}
+              className="w-16 h-16 object-contain"
+            />
+            <span className="font-headline text-xl font-extrabold text-primary uppercase tracking-widest leading-tight">
+              Nothing But
+              <br />
+              Healthy
+            </span>
+          </Link>
           <p className="text-on-surface-variant text-sm max-w-sm">
-            Crafting nutrient-dense, high-vibrancy meals for the modern health
-            enthusiast. Fresh from the soil to your table.
+            Ahmedabad&apos;s daily fruit bowl &amp; cold-pressed juice
+            subscription. Hand-cut at 4 AM, delivered before 9 AM. Farm-fresh,
+            zero preservatives.
           </p>
           <a
             href={INSTAGRAM_URL}

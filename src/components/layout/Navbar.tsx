@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import MaterialIcon from "../ui/MaterialIcon";
@@ -15,17 +16,28 @@ export default function Navbar() {
   return (
     <>
       <header className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(26,28,25,0.08)]">
-        <div className="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
-          <div className="flex items-center gap-4">
+        <div className="flex justify-between items-center px-6 py-3 w-full max-w-7xl mx-auto">
+          <div className="flex items-center gap-3">
             <button
               onClick={() => setDrawerOpen(true)}
-              className="text-primary hover:bg-surface-container transition-all p-2 rounded-full active:scale-95 duration-200"
+              aria-label="Open menu"
+              className="text-primary hover:bg-surface-container transition-all p-2 rounded-full active:scale-95 duration-200 cursor-pointer"
             >
               <MaterialIcon icon="menu" />
             </button>
-            <Link href="/">
-              <span className="text-lg font-extrabold text-on-surface uppercase tracking-widest font-headline">
-                Nothing But Healthy
+            <Link href="/" className="flex items-center gap-3 group" aria-label="Nothing But Healthy – Home">
+              <Image
+                src="/logo.png"
+                alt="Nothing But Healthy logo"
+                width={56}
+                height={56}
+                priority
+                className="w-12 h-12 md:w-14 md:h-14 object-contain group-hover:scale-105 transition-transform"
+              />
+              <span className="hidden sm:inline text-base font-extrabold text-on-surface uppercase tracking-widest font-headline leading-tight">
+                Nothing But
+                <br />
+                Healthy
               </span>
             </Link>
           </div>
@@ -45,13 +57,6 @@ export default function Navbar() {
               </Link>
             ))}
           </nav>
-
-          <Link
-            href="/menu"
-            className="text-primary hover:bg-surface-container transition-all p-2 rounded-full active:scale-95 duration-200"
-          >
-            <MaterialIcon icon="shopping_basket" />
-          </Link>
         </div>
       </header>
 
@@ -64,12 +69,29 @@ export default function Navbar() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-12">
-              <h2 className="font-headline font-bold text-primary italic text-2xl">
-                NBH
-              </h2>
+              <Link
+                href="/"
+                onClick={() => setDrawerOpen(false)}
+                className="flex items-center gap-3"
+                aria-label="Nothing But Healthy – Home"
+              >
+                <Image
+                  src="/logo.png"
+                  alt="Nothing But Healthy logo"
+                  width={48}
+                  height={48}
+                  className="w-12 h-12 object-contain"
+                />
+                <span className="font-headline font-extrabold text-primary text-lg leading-tight uppercase tracking-widest">
+                  Nothing But
+                  <br />
+                  Healthy
+                </span>
+              </Link>
               <button
                 onClick={() => setDrawerOpen(false)}
-                className="p-2 hover:bg-surface-container rounded-full transition-all"
+                aria-label="Close menu"
+                className="p-2 hover:bg-surface-container rounded-full transition-all cursor-pointer"
               >
                 <MaterialIcon icon="close" />
               </button>

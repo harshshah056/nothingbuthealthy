@@ -56,9 +56,9 @@
 
   --color-star: #FFB800;
 
-  --font-headline: "Plus Jakarta Sans", sans-serif;
-  --font-body: "Manrope", sans-serif;
-  --font-label: "Manrope", sans-serif;
+  --font-headline: var(--font-plus-jakarta), "Plus Jakarta Sans", sans-serif;
+  --font-body: var(--font-manrope), "Manrope", sans-serif;
+  --font-label: var(--font-manrope), "Manrope", sans-serif;
 }
 
 .material-symbols-outlined {

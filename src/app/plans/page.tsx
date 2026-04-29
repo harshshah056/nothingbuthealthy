@@ -1,74 +1,278 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import MaterialIcon from "@/components/ui/MaterialIcon";
-import { WHATSAPP_URL } from "@/utils/constants";
+import { WHATSAPP_URL, SITE_URL } from "@/utils/constants";
+import PlanTabs from "./PlanTabs";
 
-const plans = [
-  {
-    name: "Daily Spark",
-    icon: "bolt",
-    price: "₹125",
-    unit: "meal",
-    features: [
-      { text: "Freshly prepared daily", included: true },
-      { text: "Choice of 1 salad or bowl", included: true },
-      { text: "No weekend delivery", included: false },
-    ],
-    featured: false,
+export const metadata: Metadata = {
+  title: "Fruit Bowl & Juice Subscription Plans in Ahmedabad – From ₹79/serve",
+  description:
+    "Daily fruit bowl, cold-pressed juice, and combo subscription plans in Ahmedabad. Trial from ₹99/serve, weekly from ₹89, monthly from ₹79. Free delivery, pause anytime, order on WhatsApp.",
+  alternates: {
+    canonical: `${SITE_URL}/plans/`,
   },
-  {
-    name: "Weekly Bloom",
-    icon: "spa",
-    price: "₹105",
-    unit: "week",
-    badge: "Most Popular",
-    features: [
-      { text: "5 days of premium meals", included: true },
-      { text: "Free nutritional consultation", included: true },
-      { text: "Zero delivery fees", included: true },
-    ],
-    featured: true,
+  openGraph: {
+    title: "Fruit Bowl & Juice Subscription Plans in Ahmedabad | Nothing But Healthy",
+    description:
+      "9 plans across Fruit Bowls, Juices and Combo. From ₹79/juice, ₹119/bowl. Hand-cut and slow-pressed every morning, delivered before 9 AM across Ahmedabad.",
+    url: `${SITE_URL}/plans/`,
   },
-  {
-    name: "Monthly Harvest",
-    icon: "auto_awesome",
-    price: "₹85",
-    unit: "month",
-    features: [
-      { text: "22 days of curated meals", included: true },
-      { text: "Customized dietary mapping", included: true },
-      { text: "Priority delivery slot", included: true },
-    ],
-    savings: "Save 20% — Best Value",
-    featured: false,
-  },
-];
+};
+
+const plansSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+        { "@type": "ListItem", position: 2, name: "Plans", item: `${SITE_URL}/plans/` },
+      ],
+    },
+    {
+      "@type": "Product",
+      name: "Fruit Bowl Subscription Plans – Ahmedabad",
+      description:
+        "Daily fruit bowl subscription plans delivered fresh across Ahmedabad. Trial, weekly and monthly tiers.",
+      brand: { "@type": "Brand", name: "Nothing But Healthy" },
+      category: "Fruit subscription",
+      offers: {
+        "@type": "AggregateOffer",
+        priceCurrency: "INR",
+        lowPrice: "119",
+        highPrice: "149",
+        offerCount: "3",
+        availability: "https://schema.org/InStock",
+        offers: [
+          {
+            "@type": "Offer",
+            name: "Fruit Bowl 2-Day Trial",
+            price: "149",
+            priceCurrency: "INR",
+            priceSpecification: {
+              "@type": "UnitPriceSpecification",
+              price: "149",
+              priceCurrency: "INR",
+              unitText: "per bowl",
+            },
+            availability: "https://schema.org/InStock",
+          },
+          {
+            "@type": "Offer",
+            name: "Weekly Bloom Fruit Bowl Plan",
+            price: "129",
+            priceCurrency: "INR",
+            priceSpecification: {
+              "@type": "UnitPriceSpecification",
+              price: "129",
+              priceCurrency: "INR",
+              unitText: "per bowl",
+            },
+            availability: "https://schema.org/InStock",
+          },
+          {
+            "@type": "Offer",
+            name: "Monthly Harvest Fruit Bowl Plan",
+            price: "119",
+            priceCurrency: "INR",
+            priceSpecification: {
+              "@type": "UnitPriceSpecification",
+              price: "119",
+              priceCurrency: "INR",
+              unitText: "per bowl",
+            },
+            availability: "https://schema.org/InStock",
+          },
+        ],
+      },
+    },
+    {
+      "@type": "Product",
+      name: "Cold-Pressed Juice Subscription Plans – Ahmedabad",
+      description:
+        "Daily cold-pressed juice subscription plans delivered fresh across Ahmedabad. Trial, weekly and monthly tiers.",
+      brand: { "@type": "Brand", name: "Nothing But Healthy" },
+      category: "Juice subscription",
+      offers: {
+        "@type": "AggregateOffer",
+        priceCurrency: "INR",
+        lowPrice: "79",
+        highPrice: "99",
+        offerCount: "3",
+        availability: "https://schema.org/InStock",
+        offers: [
+          {
+            "@type": "Offer",
+            name: "Juice 2-Day Trial",
+            price: "99",
+            priceCurrency: "INR",
+            priceSpecification: {
+              "@type": "UnitPriceSpecification",
+              price: "99",
+              priceCurrency: "INR",
+              unitText: "per serve",
+            },
+            availability: "https://schema.org/InStock",
+          },
+          {
+            "@type": "Offer",
+            name: "Weekly Reset Juice Plan",
+            price: "89",
+            priceCurrency: "INR",
+            priceSpecification: {
+              "@type": "UnitPriceSpecification",
+              price: "89",
+              priceCurrency: "INR",
+              unitText: "per serve",
+            },
+            availability: "https://schema.org/InStock",
+          },
+          {
+            "@type": "Offer",
+            name: "Monthly Detox Juice Plan",
+            price: "79",
+            priceCurrency: "INR",
+            priceSpecification: {
+              "@type": "UnitPriceSpecification",
+              price: "79",
+              priceCurrency: "INR",
+              unitText: "per serve",
+            },
+            availability: "https://schema.org/InStock",
+          },
+        ],
+      },
+    },
+    {
+      "@type": "Product",
+      name: "Bowl + Juice Combo Subscription Plans – Ahmedabad",
+      description:
+        "Daily fruit bowl + cold-pressed juice combo subscription plans across Ahmedabad. Save up to 15% versus single orders.",
+      brand: { "@type": "Brand", name: "Nothing But Healthy" },
+      category: "Combo subscription",
+      offers: {
+        "@type": "AggregateOffer",
+        priceCurrency: "INR",
+        lowPrice: "169",
+        highPrice: "209",
+        offerCount: "3",
+        availability: "https://schema.org/InStock",
+      },
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "How much does a daily fruit subscription cost in Ahmedabad?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Nothing But Healthy fruit bowl subscriptions start at ₹119 per bowl on the Monthly Harvest plan (26 days, excluding Sundays). Weekly is ₹129 per bowl and the 2-day trial is ₹149 per bowl. All plans include free delivery across Ahmedabad before 9 AM.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "How much does a cold-pressed juice subscription cost in Ahmedabad?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Cold-pressed juice subscriptions start at ₹79 per serve on the Monthly Detox plan. Weekly is ₹89 per serve and the 2-day trial is ₹99 per serve. Each serve is 300ml, slow-pressed every morning at our Ahmedabad kitchen.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Is the bowl + juice combo plan worth it?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes. The combo plan saves you up to 15% versus ordering a bowl and juice separately. Monthly Vitality combo is ₹169 per day for 1 bowl + 1 juice, saving roughly ₹752 per month compared to two single-track monthly plans.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Why does the monthly plan exclude Sundays?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Our kitchen and farm partners take Sundays off so produce is at peak freshness Monday through Saturday. The monthly plan reflects 26 active delivery days. If you'd like Sunday delivery, just message us on WhatsApp and we can arrange it as an add-on.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Can I pause my subscription if I'm travelling?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Absolutely. Pause your plan anytime from the dashboard or with a single WhatsApp message. Paused days are automatically credited to your next billing cycle — no questions, no penalties, no expiry.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Do I have to commit to a contract?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "No lock-ins. Cancel anytime, no penalties, no auto-renew traps. Most subscribers start with our 2-day trial to taste the difference before upgrading to weekly or monthly.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "How do I order a Nothing But Healthy plan?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Click any plan's 'Start My Healthy Life' button. It opens WhatsApp with your selected plan pre-filled — just hit send. Our team confirms your delivery address and starts your plan from the next morning.",
+          },
+        },
+      ],
+    },
+  ],
+};
 
 export default function PlansPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(plansSchema) }}
+      />
+
       {/* Hero */}
       <section className="relative px-6 md:px-12 mb-20 overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center max-w-7xl mx-auto">
           <div className="md:col-span-6 z-10">
             <span className="inline-block px-4 py-1.5 rounded-full bg-tertiary-container text-on-tertiary-container font-bold text-[10px] uppercase tracking-widest mb-6">
-              Flexible Fueling
+              Fruit Bowls · Juices · Combo Plans
             </span>
-            <h1 className="text-5xl md:text-[4.5rem] leading-[1.05] font-extrabold text-on-background mb-8 tracking-tighter">
-              Healthy Living, <br />
-              <span className="text-primary italic">Delivered.</span>
+            <h1 className="text-4xl sm:text-5xl md:text-[4.5rem] leading-[1.05] font-extrabold text-on-background mb-8 tracking-tighter">
+              Healthy living, <br />
+              <span className="text-primary italic">delivered.</span>
             </h1>
             <p className="text-on-surface-variant text-lg max-w-md mb-10 leading-relaxed">
-              Choose a plan that fits your lifestyle. From daily bowls to monthly
-              meal programs, we make clean eating effortless and affordable.
+              Pick a 2-day trial, a weekly habit, or a full monthly programme.
+              Three tracks, nine plans — every one of them ends with a fresh
+              bowl or juice at your Ahmedabad door before 9 AM.
             </p>
+
+            <div className="flex flex-wrap gap-4">
+              <Link
+                href="#pricing"
+                className="px-8 py-4 bg-gradient-to-br from-primary to-primary-container text-white font-bold rounded-full text-lg active:scale-95 transition-transform"
+              >
+                See Plans
+              </Link>
+              <Link
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-secondary-container text-on-secondary-container font-bold rounded-full text-lg active:scale-95 transition-transform"
+              >
+                <MaterialIcon icon="chat" filled size="20px" />
+                WhatsApp Us
+              </Link>
+            </div>
           </div>
 
-          <div className="md:col-span-6 relative h-[500px] md:h-[700px]">
+          <div className="md:col-span-6 relative h-[380px] sm:h-[500px] md:h-[700px]">
             <div className="absolute inset-0 bg-primary-fixed rounded-[2rem] -rotate-3 translate-x-4 translate-y-4" />
             <Image
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjLvXeATuNv0Xbi9toDSFxfJ25CJ04OE96ntAih9kn8hVRnbEUF8zl7hLeN7RMl8bPE2VY_LuyX1nOSeDq6cSWTVS4RqFkEIX9UAMz_rI5MPJUyF9dEUtagIjPk000v0894QZleDi0r6XdGJWm9M7A2u2GclpyriGSZtXoz-fRPguB0AmnfZdCwy1DUgnQaXgb5i2KAq6qstXiLMXXiEOGfXwGNdm3F3gW9xJ7rrImRz2mYERfQbN3jtVXkXS6dHDD10jfFOdS_esg"
-              alt="Healthy salad bowls with fresh vegetables and grains"
+              src="https://images.unsplash.com/photo-1530439499745-676032f789c1?w=1200&h=1400&fit=crop&auto=format&q=80"
+              alt="Pure fruit smoothie bowl with banana, strawberry, raspberry and chia seeds — Nothing But Healthy fruit subscription plans delivered in Ahmedabad"
               fill
               unoptimized
               className="object-cover rounded-[2rem] shadow-2xl"
@@ -83,126 +287,63 @@ export default function PlansPage() {
                 <p className="font-bold text-sm text-on-surface">
                   Fresh &amp; Nutritious
                 </p>
-                <p className="text-xs text-on-surface-variant">Prepared Daily</p>
+                <p className="text-xs text-on-surface-variant">Prepared daily before 5 AM</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Pricing Grid */}
-      <section className="py-24 px-6 md:px-12 bg-surface-container-low">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl font-extrabold mb-4 tracking-tighter">
-              Pick Your Plan
-            </h2>
-            <p className="text-on-surface-variant max-w-xl mx-auto">
-              Simple, transparent pricing with no hidden fees. Pause or cancel
-              anytime.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-            {plans.map((plan) => (
-              <div
-                key={plan.name}
-                className={`relative rounded-[2rem] p-8 flex flex-col transition-transform hover:-translate-y-1 ${
-                  plan.featured
-                    ? "bg-surface-container-lowest ring-4 ring-primary shadow-2xl scale-100 md:scale-105"
-                    : "bg-surface-container-low editorial-shadow"
-                }`}
-              >
-                {plan.badge && (
-                  <span className="absolute -top-4 left-1/2 -translate-x-1/2 px-5 py-1.5 rounded-full editorial-gradient text-white text-xs font-bold uppercase tracking-wider">
-                    {plan.badge}
-                  </span>
-                )}
-
-                <MaterialIcon
-                  icon={plan.icon}
-                  className="text-primary mb-4"
-                  size="36px"
-                />
-                <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-                <div className="flex items-baseline gap-1 mb-6">
-                  <span className="text-4xl font-extrabold text-primary">
-                    {plan.price}
-                  </span>
-                  <span className="text-on-surface-variant text-sm">
-                    /{plan.unit}
-                  </span>
-                </div>
-
-                <ul className="space-y-4 mb-8 flex-1">
-                  {plan.features.map((f) => (
-                    <li key={f.text} className="flex items-center gap-3">
-                      <MaterialIcon
-                        icon={f.included ? "check_circle" : "cancel"}
-                        filled={plan.featured && f.included}
-                        className={
-                          f.included ? "text-primary" : "text-outline-variant"
-                        }
-                        size="20px"
-                      />
-                      <span
-                        className={
-                          f.included
-                            ? "text-on-surface"
-                            : "text-on-surface-variant line-through"
-                        }
-                      >
-                        {f.text}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-
-                {plan.savings && (
-                  <p className="text-primary font-bold text-sm mb-4 text-center">
-                    {plan.savings}
-                  </p>
-                )}
-
-                <Link
-                  href="/subscribe"
-                  className="block text-center editorial-gradient text-white font-bold py-3.5 rounded-full mb-3 hover:opacity-90 transition-opacity"
-                >
-                  Subscribe Now
-                </Link>
-                <Link
-                  href={WHATSAPP_URL}
-                  className="flex items-center justify-center gap-2 text-center border border-outline-variant text-on-surface font-semibold py-3.5 rounded-full hover:bg-surface-container transition-colors"
-                >
-                  <MaterialIcon icon="chat" size="18px" />
-                  WhatsApp Inquiry
-                </Link>
-              </div>
-            ))}
-          </div>
+      {/* Comparison strip */}
+      <section className="px-6 md:px-12 mb-12">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { stat: "9", label: "Subscription plans" },
+            { stat: "₹79", label: "Lowest price / serve" },
+            { stat: "Before 9 AM", label: "Daily delivery window" },
+            { stat: "0%", label: "Lock-in or auto-renew" },
+          ].map((item) => (
+            <div
+              key={item.label}
+              className="bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/30"
+            >
+              <p className="text-3xl md:text-4xl font-extrabold text-primary tracking-tighter">
+                {item.stat}
+              </p>
+              <p className="text-on-surface-variant text-sm mt-1">
+                {item.label}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 
+      {/* Plan tracks (interactive) */}
+      <PlanTabs />
+
       {/* Promise of Purity Bento */}
-      <section className="py-24 px-6 md:px-12">
+      <section className="py-16 md:py-24 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-            <div className="md:col-span-8 bg-surface-container-lowest rounded-[2rem] p-10 md:p-14 relative overflow-hidden">
+            <div className="md:col-span-8 bg-surface-container-lowest rounded-[2rem] p-8 md:p-14 relative overflow-hidden">
               <h2 className="text-[2.5rem] font-bold tracking-tight mb-4">
                 The Promise of Purity
               </h2>
               <p className="text-on-surface-variant leading-relaxed max-w-xl mb-8">
-                Every meal we deliver is crafted from locally sourced, seasonal
-                produce — free of preservatives, refined sugars, and artificial
-                colors. What reaches your table is nothing but honest, wholesome
-                food.
+                Every bowl and bottle we deliver is crafted from locally
+                sourced, seasonal Gujarat produce — free of preservatives,
+                refined sugars, artificial colors, and heat treatment. What
+                reaches your table is nothing but honest, wholesome food.
               </p>
               <div className="flex flex-wrap gap-3">
                 <span className="inline-block px-4 py-1.5 rounded-full bg-tertiary-container text-on-tertiary-container font-bold text-xs uppercase tracking-wider">
-                  Nutritious
+                  Cut Same Morning
                 </span>
                 <span className="inline-block px-4 py-1.5 rounded-full bg-secondary-container text-on-secondary-container font-bold text-xs uppercase tracking-wider">
-                  Prepared Daily
+                  Slow-Pressed
+                </span>
+                <span className="inline-block px-4 py-1.5 rounded-full bg-primary-container text-on-primary-container font-bold text-xs uppercase tracking-wider">
+                  Zero Preservatives
                 </span>
               </div>
               <div className="absolute -right-12 -bottom-12 opacity-[0.07]">
@@ -214,16 +355,15 @@ export default function PlansPage() {
               </div>
             </div>
 
-            <div className="md:col-span-4 bg-primary rounded-[2rem] p-10 flex flex-col justify-between min-h-[280px] text-white">
+            <div className="md:col-span-4 bg-primary rounded-[2rem] p-6 md:p-10 flex flex-col justify-between min-h-[280px] text-white">
               <MaterialIcon icon="local_shipping" className="text-4xl" />
               <div>
                 <h3 className="text-xl font-bold mb-2">
                   Daily Fresh Delivery
                 </h3>
                 <p className="text-primary-fixed text-sm leading-relaxed">
-                  Meals dispatched every morning from our cloud kitchen and
-                  delivered to your doorstep before lunch, across all major
-                  Ahmedabad pin codes.
+                  Dispatched every morning from our Ahmedabad cloud kitchen and
+                  delivered before 9 AM across all major Ahmedabad pin codes.
                 </p>
               </div>
             </div>
@@ -232,50 +372,148 @@ export default function PlansPage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-24 px-6 md:px-12 bg-surface-container-low">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-4xl font-extrabold mb-4 tracking-tighter">
-            Frequently Asked Questions
-          </h2>
-          <p className="text-on-surface-variant mb-12">
-            Got questions? We&apos;ve got answers.
-          </p>
+      <section className="py-16 md:py-24 px-6 md:px-12 bg-surface-container-low">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-primary font-bold uppercase text-[12px] tracking-widest mb-4">
+              Plan FAQ
+            </p>
+            <h2 className="text-4xl font-extrabold tracking-tighter">
+              Everything about pricing &amp; delivery.
+            </h2>
+          </div>
 
-          <div className="space-y-4 text-left">
+          <div className="space-y-4">
+            <details className="group bg-surface-container-lowest rounded-2xl p-6 editorial-shadow">
+              <summary className="flex items-center justify-between cursor-pointer list-none font-bold text-lg">
+                How much does a daily fruit subscription cost in Ahmedabad?
+                <MaterialIcon
+                  icon="expand_more"
+                  className="text-on-surface-variant transition-transform duration-300 group-open:rotate-180 shrink-0 ml-3"
+                  size="24px"
+                />
+              </summary>
+              <p className="mt-4 text-on-surface-variant leading-relaxed">
+                Fruit bowl plans start at <strong>₹119/bowl</strong> on the
+                Monthly Harvest plan (26 days, ₹3,094/month). Weekly Bloom is
+                ₹129/bowl (₹903/week) and the 2-day trial is ₹149/bowl. All
+                plans include free delivery across Ahmedabad before 9 AM.
+              </p>
+            </details>
+
+            <details className="group bg-surface-container-lowest rounded-2xl p-6 editorial-shadow">
+              <summary className="flex items-center justify-between cursor-pointer list-none font-bold text-lg">
+                How much does a cold-pressed juice subscription cost?
+                <MaterialIcon
+                  icon="expand_more"
+                  className="text-on-surface-variant transition-transform duration-300 group-open:rotate-180 shrink-0 ml-3"
+                  size="24px"
+                />
+              </summary>
+              <p className="mt-4 text-on-surface-variant leading-relaxed">
+                Juice plans start at <strong>₹79/serve</strong> on the Monthly
+                Detox plan (₹2,054/month). Weekly Reset is ₹89/serve and the
+                2-day trial is ₹99/serve. Each serve is 300ml, slow-pressed
+                every morning at our Ahmedabad kitchen.
+              </p>
+            </details>
+
+            <details className="group bg-surface-container-lowest rounded-2xl p-6 editorial-shadow">
+              <summary className="flex items-center justify-between cursor-pointer list-none font-bold text-lg">
+                Is the bowl + juice combo plan worth it?
+                <MaterialIcon
+                  icon="expand_more"
+                  className="text-on-surface-variant transition-transform duration-300 group-open:rotate-180 shrink-0 ml-3"
+                  size="24px"
+                />
+              </summary>
+              <p className="mt-4 text-on-surface-variant leading-relaxed">
+                Yes — combo plans save up to <strong>15%</strong> versus
+                ordering a bowl and juice separately. The Monthly Vitality
+                combo is ₹169/day for 1 bowl + 1 juice, saving roughly ₹752 a
+                month compared to two single-track monthly plans.
+              </p>
+            </details>
+
+            <details className="group bg-surface-container-lowest rounded-2xl p-6 editorial-shadow">
+              <summary className="flex items-center justify-between cursor-pointer list-none font-bold text-lg">
+                Why does the monthly plan exclude Sundays?
+                <MaterialIcon
+                  icon="expand_more"
+                  className="text-on-surface-variant transition-transform duration-300 group-open:rotate-180 shrink-0 ml-3"
+                  size="24px"
+                />
+              </summary>
+              <p className="mt-4 text-on-surface-variant leading-relaxed">
+                Our kitchen and farm partners take Sundays off so produce is at
+                peak freshness Monday through Saturday. The monthly plan
+                reflects 26 active delivery days. Need Sunday delivery? Message
+                us on WhatsApp — we can usually arrange it as an add-on.
+              </p>
+            </details>
+
             <details className="group bg-surface-container-lowest rounded-2xl p-6 editorial-shadow">
               <summary className="flex items-center justify-between cursor-pointer list-none font-bold text-lg">
                 Can I pause my subscription?
                 <MaterialIcon
                   icon="expand_more"
-                  className="text-on-surface-variant transition-transform duration-300 group-open:rotate-180"
+                  className="text-on-surface-variant transition-transform duration-300 group-open:rotate-180 shrink-0 ml-3"
                   size="24px"
                 />
               </summary>
               <p className="mt-4 text-on-surface-variant leading-relaxed">
-                Absolutely. You can pause your subscription at any time from
-                your dashboard or by messaging us on WhatsApp. Paused days are
-                automatically credited to your next billing cycle — no questions
-                asked.
+                Anytime. Pause from your dashboard or one WhatsApp message.
+                Paused days are credited to your next billing cycle — no
+                questions, no penalties, no expiry.
               </p>
             </details>
 
             <details className="group bg-surface-container-lowest rounded-2xl p-6 editorial-shadow">
               <summary className="flex items-center justify-between cursor-pointer list-none font-bold text-lg">
-                Do you cater to specific allergies?
+                How do I order?
                 <MaterialIcon
                   icon="expand_more"
-                  className="text-on-surface-variant transition-transform duration-300 group-open:rotate-180"
+                  className="text-on-surface-variant transition-transform duration-300 group-open:rotate-180 shrink-0 ml-3"
                   size="24px"
                 />
               </summary>
               <p className="mt-4 text-on-surface-variant leading-relaxed">
-                Yes. During onboarding we capture your dietary preferences and
-                allergen profile. Our kitchen team flags every ingredient, and
-                you can swap items freely within your plan. Common allergens like
-                nuts, gluten, and dairy are always clearly labelled.
+                Click <em>Start My Healthy Life</em> on any plan. It opens
+                WhatsApp with your chosen plan pre-filled — just hit send. Our
+                team confirms your delivery address and your first bowl arrives
+                the next morning.
               </p>
             </details>
           </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-16 md:py-24 px-6 md:px-12 mb-16 md:mb-24">
+        <div className="max-w-5xl mx-auto bg-primary-container rounded-[3rem] p-8 sm:p-12 md:p-20 text-center relative overflow-hidden">
+          <div className="relative z-10">
+            <h2 className="text-4xl md:text-5xl text-white font-extrabold mb-8 tracking-tighter">
+              Still deciding? Try 2 days for ₹198.
+            </h2>
+            <p className="text-on-primary-container text-xl mb-12 max-w-2xl mx-auto">
+              Two cold-pressed juices delivered tomorrow morning. No
+              commitment, no auto-renew. Taste the difference before you
+              subscribe.
+            </p>
+            <Link
+              href={`${WHATSAPP_URL}?text=${encodeURIComponent(
+                "Hi Nothing But Healthy! I'd like to start the *Juice 2-Day Trial* (₹99/serve, ₹198 total). Please help me get set up."
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-white text-primary px-10 py-5 rounded-full font-black text-lg shadow-xl hover:scale-105 transition-transform"
+            >
+              <MaterialIcon icon="chat" filled size="22px" />
+              Start My Healthy Life
+            </Link>
+          </div>
+          <div className="absolute -top-24 -left-24 w-64 h-64 bg-tertiary/20 rounded-full blur-3xl" />
+          <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-primary/30 rounded-full blur-3xl" />
         </div>
       </section>
     </>
