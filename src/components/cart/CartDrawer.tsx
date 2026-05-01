@@ -1,25 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import MaterialIcon from "@/components/ui/MaterialIcon";
 import { useCart } from "@/contexts/CartContext";
 import { WHATSAPP_URL } from "@/utils/constants";
-
-// HTMLInputElement.showPicker (TS lib already includes it but Safari < 16 may not).
-// We feature-detect at runtime and fall back to .click()/focus() as a safety net.
-function openDatePicker(input: HTMLInputElement | null) {
-  if (!input) return;
-  try {
-    if (typeof input.showPicker === "function") {
-      input.showPicker();
-      return;
-    }
-  } catch {
-    // showPicker can throw if not in a user gesture or unsupported — fall through.
-  }
-  input.focus();
-  input.click();
-}
 
 function getTomorrowISO(): string {
   const d = new Date();
@@ -71,7 +55,6 @@ export default function CartDrawer() {
   const [deliveryDate, setDeliveryDate] = useState<string>(() => getTomorrowISO());
   const [notes, setNotes] = useState<string>("");
   const [notesOpen, setNotesOpen] = useState(false);
-  const dateInputRef = useRef<HTMLInputElement>(null);
 
   // Lock body scroll when drawer open
   useEffect(() => {
@@ -273,42 +256,49 @@ export default function CartDrawer() {
             has room to breathe on mobile. */}
         {items.length > 0 && (
           <footer className="border-t border-outline-variant/40 px-5 pt-3 pb-4 shrink-0 bg-surface-container-low/40">
-            {/* Date pill + add-note link in one row */}
+            {/* Date pill + add-note link in one row.
+                The "Deliver" pill is implemented as a transparent native
+                <input type="date"> overlaid on a styled visual layer:
+                  - The input stays in normal flow at full size with opacity:0
+                    so mobile Safari / Chrome treat it as a regular visible
+                    date input and reliably open the native picker on tap.
+                  - The visual layer below it is `pointer-events-none` so all
+                    taps land on the input.
+                Earlier attempts using `sr-only` + showPicker() failed on
+                mobile because clipped/hidden inputs are blocked by the
+                browser from opening native pickers. */}
             <div className="flex items-center gap-2 mb-3">
-              <button
-                type="button"
-                onClick={() => openDatePicker(dateInputRef.current)}
-                aria-label={`Delivery date: ${formatDateForDisplay(deliveryDate)}. Tap to change.`}
+              <label
+                htmlFor="delivery-date"
                 title="Earliest delivery is tomorrow — bowls are cut at 4 AM."
-                className="flex-1 min-w-0 flex items-center gap-2 px-3 py-2 rounded-full bg-surface-container-lowest border border-outline-variant hover:border-primary/60 transition-colors cursor-pointer text-left"
+                className="flex-1 min-w-0 relative cursor-pointer"
               >
-                <MaterialIcon
-                  icon="calendar_today"
-                  className="text-primary shrink-0"
-                  size="16px"
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none flex items-center gap-2 px-3 py-2 rounded-full bg-surface-container-lowest border border-outline-variant"
+                >
+                  <MaterialIcon
+                    icon="calendar_today"
+                    className="text-primary shrink-0"
+                    size="16px"
+                  />
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant shrink-0">
+                    Deliver
+                  </span>
+                  <span className="text-sm font-bold text-on-surface truncate flex-1">
+                    {formatDateForDisplay(deliveryDate)}
+                  </span>
+                </div>
+                <input
+                  id="delivery-date"
+                  type="date"
+                  min={minDate}
+                  value={deliveryDate}
+                  onChange={(e) => setDeliveryDate(e.target.value)}
+                  aria-label="Delivery date"
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
-                <span className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant shrink-0">
-                  Deliver
-                </span>
-                <span className="text-sm font-bold text-on-surface truncate flex-1">
-                  {formatDateForDisplay(deliveryDate)}
-                </span>
-              </button>
-              {/* Native date input lives outside the button (HTML doesn't allow
-                  inputs nested in buttons). Visually hidden but kept in the
-                  accessibility tree so screen readers and keyboard users
-                  retain a real <input type="date">. */}
-              <input
-                ref={dateInputRef}
-                id="delivery-date"
-                type="date"
-                min={minDate}
-                value={deliveryDate}
-                onChange={(e) => setDeliveryDate(e.target.value)}
-                className="sr-only"
-                tabIndex={-1}
-                aria-hidden="true"
-              />
+              </label>
               <button
                 type="button"
                 onClick={() => setNotesOpen((v) => !v)}
