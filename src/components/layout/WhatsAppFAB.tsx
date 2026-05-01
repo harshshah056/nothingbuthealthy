@@ -1,9 +1,30 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { WHATSAPP_URL } from "@/utils/constants";
 import { trackEvent } from "@/utils/analytics";
+import { useCart } from "@/contexts/CartContext";
+
+/** Routes where the global WhatsApp FAB is always hidden because the page
+ *  already has a prominent sticky / inline WhatsApp CTA. Avoids visual
+ *  collision with sticky bottom bars on mobile. */
+const ALWAYS_HIDDEN_ROUTES = ["/plans", "/contact"];
 
 export default function WhatsAppFAB() {
+  const pathname = usePathname() ?? "";
+  const { itemCount, hydrated } = useCart();
+
+  const alwaysHidden = ALWAYS_HIDDEN_ROUTES.some(
+    (r) => pathname === r || pathname.startsWith(`${r}/`)
+  );
+  // On /menu, the sticky checkout bar appears when items are in cart and
+  // overlaps this FAB. Hide it there too (per-item WhatsApp quick-order
+  // buttons remain on every card).
+  const onMenuWithItems =
+    hydrated && itemCount > 0 && pathname.startsWith("/menu");
+
+  if (alwaysHidden || onMenuWithItems) return null;
+
   return (
     <a
       href={WHATSAPP_URL}
