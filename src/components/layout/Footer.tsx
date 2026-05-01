@@ -130,6 +130,14 @@ export default function Footer() {
                 Contact &amp; support
               </Link>
             </li>
+            <li>
+              <Link
+                href="/blog"
+                className="hover:text-primary transition-colors"
+              >
+                Healthy living guides
+              </Link>
+            </li>
           </ul>
         </div>
 

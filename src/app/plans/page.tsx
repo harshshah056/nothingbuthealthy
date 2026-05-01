@@ -404,6 +404,16 @@ export default function PlansPage() {
             <h2 className="text-4xl font-extrabold tracking-tighter">
               Everything about pricing &amp; delivery.
             </h2>
+            <p className="text-on-surface-variant text-sm mt-3">
+              Still researching?{" "}
+              <Link
+                href="/blog/fruit-subscription-ahmedabad-guide"
+                className="text-primary font-bold underline-offset-2 hover:underline"
+              >
+                Read the complete fruit subscription guide
+              </Link>
+              .
+            </p>
           </div>
 
           <div className="space-y-4">

@@ -127,8 +127,8 @@ export const juices: MenuItem[] = [
       "60ml of concentrated firepower. The pre-meeting, pre-flight, pre-anything immunity boost.",
     ingredients: "Ginger · Turmeric · Lemon · Black pepper · Cayenne",
     image:
-      "https://images.unsplash.com/photo-1606755456206-b25206cde27d?w=900&h=700&fit=crop&auto=format&q=80",
-    alt: "60ml ginger turmeric immunity shot with lemon and black pepper — cold-pressed wellness shot delivered in Ahmedabad",
+      "https://images.unsplash.com/photo-1612182062936-e33efa5d537e?w=900&h=700&fit=crop&auto=format&q=80",
+    alt: "60ml ginger turmeric immunity shot in clear glass — cold-pressed wellness shot delivered in Ahmedabad",
   },
   {
     slug: "watermelon-mint-juice",
@@ -173,8 +173,8 @@ export const juices: MenuItem[] = [
       "Apple-Beet-Carrot. The OG. Three ingredients, every micronutrient your body craves.",
     ingredients: "Apple · Beetroot · Carrot · Ginger",
     image:
-      "https://images.unsplash.com/photo-1638176067000-9e2c89f5a3f1?w=900&h=700&fit=crop&auto=format&q=80",
-    alt: "ABC Classic cold-pressed juice — apple, beetroot, carrot and ginger — iron-boost juice delivered in Ahmedabad",
+      "https://images.unsplash.com/photo-1551040096-5f4aec6ca12b?w=900&h=700&fit=crop&auto=format&q=80",
+    alt: "ABC Classic cold-pressed juice in glass jars — apple, beetroot, carrot and ginger — iron-boost juice delivered in Ahmedabad",
   },
   {
     slug: "coco-crush",

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Plus_Jakarta_Sans, Manrope } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
@@ -255,6 +256,23 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-surface overflow-x-hidden">
+        {/* Google Analytics 4 (gtag.js) — loaded after interactive so it never
+            blocks LCP. The site's `trackEvent` util in `src/utils/analytics.ts`
+            also calls `gtag('event', ...)` directly, so every Add-to-cart,
+            Subscribe and WhatsApp click flows into GA4 automatically. */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-07XVL4S858"
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            window.gtag = gtag;
+            gtag('js', new Date());
+            gtag('config', 'G-07XVL4S858', { send_page_view: true });
+          `}
+        </Script>
         <a href="#main-content" className="skip-to-content">
           Skip to content
         </a>

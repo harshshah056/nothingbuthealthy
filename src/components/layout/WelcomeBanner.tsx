@@ -68,7 +68,7 @@ export default function WelcomeBanner() {
       role="dialog"
       aria-live="polite"
       aria-label="First-time customer offer"
-      className="fixed inset-x-3 bottom-64 z-40 md:left-auto md:right-6 md:bottom-6 md:max-w-sm"
+      className="fixed inset-x-3 bottom-64 z-40 md:inset-x-auto md:left-6 md:bottom-6 md:max-w-sm"
     >
       <div className="relative bg-on-surface text-surface rounded-2xl shadow-2xl p-4 md:p-5 pr-10 flex gap-3 items-start">
         <div className="w-10 h-10 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center shrink-0">

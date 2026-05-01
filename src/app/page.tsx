@@ -576,6 +576,16 @@ export default function HomePage() {
             <h2 className="text-4xl md:text-5xl font-extrabold tracking-tighter">
               Everything about your daily fruit habit.
             </h2>
+            <p className="text-on-surface-variant text-sm mt-3">
+              Want the full breakdown? Read our{" "}
+              <Link
+                href="/blog/fruit-subscription-ahmedabad-guide"
+                className="text-primary font-bold underline-offset-2 hover:underline"
+              >
+                complete guide to fruit subscriptions in Ahmedabad
+              </Link>
+              .
+            </p>
           </div>
 
           <div className="space-y-4">

@@ -52,13 +52,22 @@ interface DataLayerEntry extends AnalyticsParams {
 declare global {
   interface Window {
     dataLayer?: DataLayerEntry[];
+    /** gtag.js global, populated by the GA4 snippet in layout.tsx. */
+    gtag?: (
+      command: "event" | "config" | "js" | "set",
+      action: string | Date,
+      params?: Record<string, unknown>
+    ) => void;
   }
 }
 
-/** Push a structured event to `window.dataLayer`. Safe on the server (no-op). */
+/** Push a structured event to `window.dataLayer` AND fire it through gtag.js
+ *  so it shows up directly in GA4 without needing a GTM container.
+ *  Safe on the server (no-op). */
 export function trackEvent(name: AnalyticsEventName, params: AnalyticsParams = {}): void {
   if (typeof window === "undefined") return;
   try {
+    // 1. dataLayer push — GTM-ready, also picked up by gtag.js.
     window.dataLayer = window.dataLayer ?? [];
     window.dataLayer.push({
       event: name,
@@ -66,6 +75,16 @@ export function trackEvent(name: AnalyticsEventName, params: AnalyticsParams = {
       currency: "INR",
       ...params,
     });
+
+    // 2. gtag('event', ...) — fires the event into GA4 directly. Custom events
+    //    (whatsapp_click, subscribe_intent, etc.) appear under
+    //    `Reports → Engagement → Events` in GA4 within 24h.
+    if (typeof window.gtag === "function") {
+      window.gtag("event", name, {
+        currency: "INR",
+        ...params,
+      });
+    }
   } catch {
     // Never let analytics throw into UX.
   }
