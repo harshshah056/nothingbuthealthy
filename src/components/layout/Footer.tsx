@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import MaterialIcon from "../ui/MaterialIcon";
+import { TrackedExternalLink } from "@/components/analytics/TrackedLink";
 import {
   INSTAGRAM_URL,
   INSTAGRAM_HANDLE,
@@ -12,8 +13,8 @@ import {
 export default function Footer() {
   return (
     <footer className="bg-surface-container-low py-12 px-6 hidden md:block">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div className="col-span-2 space-y-4">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8">
+        <div className="md:col-span-4 space-y-4">
           <Link href="/" className="inline-flex items-center gap-3" aria-label="Nothing But Healthy – Home">
             <Image
               src={asset("/logo.png")}
@@ -44,49 +45,108 @@ export default function Footer() {
           </a>
         </div>
 
-        <div className="space-y-4">
+        <div className="md:col-span-3 space-y-4">
           <h5 className="font-bold text-sm uppercase tracking-widest text-on-surface">
-            Links
+            Order &amp; subscribe
           </h5>
           <ul className="space-y-2 text-sm text-on-surface-variant font-medium">
             <li>
-              <Link href="/about" className="hover:text-primary transition-colors">
-                Our Story
+              <Link
+                href="/menu"
+                className="hover:text-primary transition-colors"
+              >
+                Today&apos;s fruit-bowl menu
               </Link>
             </li>
             <li>
-              <Link href="/plans" className="hover:text-primary transition-colors">
-                Subscription Plans
+              <Link
+                href="/menu#desi-sunrise-bowl"
+                className="hover:text-primary transition-colors"
+              >
+                Desi Sunrise Bowl (₹199)
               </Link>
             </li>
             <li>
-              <Link href="/corporate" className="hover:text-primary transition-colors">
-                Corporate Orders
+              <Link
+                href="/menu#coco-cane"
+                className="hover:text-primary transition-colors"
+              >
+                Coco-Cane juice (₹139)
               </Link>
             </li>
             <li>
-              <Link href="/contact" className="hover:text-primary transition-colors">
-                Contact
+              <Link
+                href="/plans"
+                className="hover:text-primary transition-colors"
+              >
+                Daily fruit subscription plans
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/plans#pricing"
+                className="hover:text-primary transition-colors"
+              >
+                2-day trial · ₹99 / juice
               </Link>
             </li>
           </ul>
         </div>
 
-        <div className="space-y-4">
+        <div className="md:col-span-2 space-y-4">
+          <h5 className="font-bold text-sm uppercase tracking-widest text-on-surface">
+            Company
+          </h5>
+          <ul className="space-y-2 text-sm text-on-surface-variant font-medium">
+            <li>
+              <Link
+                href="/about"
+                className="hover:text-primary transition-colors"
+              >
+                From Gujarat (about)
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/corporate"
+                className="hover:text-primary transition-colors"
+              >
+                Bulk &amp; corporate orders
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/contact"
+                className="hover:text-primary transition-colors"
+              >
+                Delivery zones in Ahmedabad
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/contact"
+                className="hover:text-primary transition-colors"
+              >
+                Contact &amp; support
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        <div className="md:col-span-3 space-y-4">
           <h5 className="font-bold text-sm uppercase tracking-widest text-on-surface">
             Get in touch
           </h5>
           <ul className="space-y-3 text-sm text-on-surface-variant font-medium">
             <li>
-              <a
+              <TrackedExternalLink
                 href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+                eventParams={{ source: "footer-link" }}
                 className="inline-flex items-center gap-2 hover:text-primary transition-colors"
               >
                 <MaterialIcon icon="chat" size="18px" className="text-primary" />
                 {WHATSAPP_DISPLAY}
-              </a>
+              </TrackedExternalLink>
             </li>
             <li>
               <a
@@ -110,15 +170,14 @@ export default function Footer() {
             >
               <InstagramIcon className="w-5 h-5" />
             </a>
-            <a
+            <TrackedExternalLink
               href={WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+              eventParams={{ source: "footer-icon" }}
               aria-label="WhatsApp"
               className="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
             >
               <MaterialIcon icon="chat" />
-            </a>
+            </TrackedExternalLink>
           </div>
         </div>
       </div>

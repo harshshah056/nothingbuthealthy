@@ -1,6 +1,7 @@
 "use client";
 
 import { WHATSAPP_URL } from "@/utils/constants";
+import { trackEvent } from "@/utils/analytics";
 
 export default function WhatsAppFAB() {
   return (
@@ -8,6 +9,7 @@ export default function WhatsAppFAB() {
       href={WHATSAPP_URL}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() => trackEvent("whatsapp_click", { source: "fab" })}
       className="fixed bottom-24 right-6 z-50 w-16 h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center editorial-shadow active:scale-95 transition-transform hover:scale-105 md:bottom-8 md:right-8"
       aria-label="Order on WhatsApp"
     >

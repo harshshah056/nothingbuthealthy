@@ -6,194 +6,23 @@ import Link from "next/link";
 import MaterialIcon from "@/components/ui/MaterialIcon";
 import VegBadge from "@/components/ui/VegBadge";
 import { useCart } from "@/contexts/CartContext";
+import { WHATSAPP_URL } from "@/utils/constants";
+import { trackEvent } from "@/utils/analytics";
+import {
+  fruitBowls,
+  juices,
+  makeItemId,
+  type MenuItem,
+} from "./menuData";
 
 type Category = "All" | "Fruit Bowls" | "Juices";
 
 const categories: Category[] = ["All", "Fruit Bowls", "Juices"];
 
-interface MenuItem {
-  title: string;
-  category: "Fruit Bowls" | "Juices";
-  price: number;
-  size?: string;
-  tag: string;
-  tagBg: string;
-  description: string;
-  ingredients: string;
-  image: string;
-  alt: string;
-}
-
-const fruitBowls: MenuItem[] = [
-  {
-    title: "Desi Sunrise Bowl",
-    category: "Fruit Bowls",
-    price: 199,
-    tag: "Local Favourite",
-    tagBg: "bg-tertiary-container text-on-tertiary-container",
-    description:
-      "A morning classic built on Gujarat-grown produce — the easiest way to start your day right.",
-    ingredients: "Banana · Papaya · Pomegranate · Guava · Chia seeds",
-    image:
-      "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=900&h=700&fit=crop&auto=format&q=80",
-    alt: "Desi Sunrise fruit bowl with banana, papaya, pomegranate and chia seeds — fresh fruit subscription delivered in Ahmedabad",
-  },
-  {
-    title: "Watermelon Cooler",
-    category: "Fruit Bowls",
-    price: 179,
-    tag: "Hydrating",
-    tagBg: "bg-tertiary-container text-on-tertiary-container",
-    description:
-      "Summer hero. Hydrating, electrolyte-rich, and ready to fight Ahmedabad heat.",
-    ingredients: "Watermelon · Muskmelon · Basil seeds · Mint · Lime",
-    image:
-      "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=900&h=700&fit=crop&auto=format&q=80",
-    alt: "Watermelon Cooler bowl with muskmelon, basil seeds and mint — hydrating fruit bowl delivered in Ahmedabad",
-  },
-  {
-    title: "Protein Power Bowl",
-    category: "Fruit Bowls",
-    price: 259,
-    tag: "High Protein",
-    tagBg: "bg-secondary-container text-on-secondary-container",
-    description:
-      "Built for gym mornings. Banana, peanut butter, almonds — sustained fuel for 4+ hours.",
-    ingredients: "Banana · Peanut butter · Almond · Chia · Almond milk",
-    image:
-      "https://images.unsplash.com/photo-1638813133319-897c2e3eb13b?w=900&h=700&fit=crop&auto=format&q=80",
-    alt: "Protein Power fruit bowl with banana, raspberry and chia seeds — high-protein 100% vegetarian fruit bowl for gym mornings in Ahmedabad",
-  },
-  {
-    title: "Alphonso Bliss",
-    category: "Fruit Bowls",
-    price: 279,
-    tag: "Seasonal",
-    tagBg: "bg-secondary-container text-on-secondary-container",
-    description:
-      "Pure summer in a bowl. Hand-picked Valsad alphonsos at peak ripeness with toasted nuts.",
-    ingredients: "Alphonso mango · Almonds · Pistachio · Cardamom · Honey",
-    image:
-      "https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=900&h=700&fit=crop&auto=format&q=80",
-    alt: "Alphonso Bliss bowl with hand-picked Valsad alphonso mango, almonds and pistachio — seasonal fruit bowl in Ahmedabad",
-  },
-  {
-    title: "The Berry Zenith",
-    category: "Fruit Bowls",
-    price: 299,
-    tag: "Energy Boost",
-    tagBg: "bg-tertiary-container text-on-tertiary-container",
-    description:
-      "A vibrant medley of wild berries and acai topped with raw honey and coconut flakes.",
-    ingredients: "Strawberry · Blueberry · Acai · Chia seeds · Honey · Coconut",
-    image:
-      "https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=900&h=700&fit=crop&auto=format&q=80",
-    alt: "Berry Zenith acai bowl with strawberry, blueberry, chia seeds and honey — energy-boost fruit bowl in Ahmedabad",
-  },
-  {
-    title: "The Antioxidant Stack",
-    category: "Fruit Bowls",
-    price: 329,
-    tag: "Skin Glow",
-    tagBg: "bg-primary-container text-on-primary-container",
-    description:
-      "A polyphenol powerhouse for clearer skin and stronger immunity. Doctor-approved.",
-    ingredients: "Blueberry · Pomegranate · Kiwi · Walnut · Flax seeds",
-    image:
-      "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=900&h=700&fit=crop&auto=format&q=80",
-    alt: "Antioxidant Stack bowl with blueberry, pomegranate, kiwi and walnut — skin-glow polyphenol-rich fruit bowl in Ahmedabad",
-  },
-];
-
-const juices: MenuItem[] = [
-  {
-    title: "Immunity Shot",
-    category: "Juices",
-    price: 79,
-    size: "60ml",
-    tag: "Wellness Shot",
-    tagBg: "bg-primary-container text-on-primary-container",
-    description:
-      "60ml of concentrated firepower. The pre-meeting, pre-flight, pre-anything immunity boost.",
-    ingredients: "Ginger · Turmeric · Lemon · Black pepper · Cayenne",
-    image:
-      "https://images.unsplash.com/photo-1606755456206-b25206cde27d?w=900&h=700&fit=crop&auto=format&q=80",
-    alt: "60ml ginger turmeric immunity shot with lemon and black pepper — cold-pressed wellness shot delivered in Ahmedabad",
-  },
-  {
-    title: "Watermelon Mint",
-    category: "Juices",
-    price: 129,
-    size: "300ml",
-    tag: "Hydrating",
-    tagBg: "bg-tertiary-container text-on-tertiary-container",
-    description:
-      "Pure summer hydration. Lycopene-rich, electrolyte-balanced, the city's best heat-beater.",
-    ingredients: "Watermelon · Mint · Lemon · Pink salt",
-    image:
-      "https://images.unsplash.com/photo-1683166263544-e754e85c3e7c?w=900&h=700&fit=crop&auto=format&q=80",
-    alt: "Glass of cold-pressed watermelon mint juice with fresh watermelon slice — hydrating summer juice delivered in Ahmedabad",
-  },
-  {
-    title: "Coco-Cane",
-    category: "Juices",
-    price: 139,
-    size: "300ml",
-    tag: "Summer Cooler",
-    tagBg: "bg-secondary-container text-on-secondary-container",
-    description:
-      "Gujarat's nostalgic summer drink, reborn. Cold-pressed sugarcane meets tender coconut water — naturally sweet, deeply hydrating.",
-    ingredients: "Cold-pressed sugarcane · Tender coconut water · Lemon · Ginger",
-    image:
-      "https://images.unsplash.com/photo-1642522538458-0ece1670d495?w=900&h=700&fit=crop&auto=format&q=80",
-    alt: "Coco-Cane cold-pressed juice in tall glass — sugarcane and tender coconut water blend — Gujarati summer cooler delivered in Ahmedabad",
-  },
-  {
-    title: "ABC Classic",
-    category: "Juices",
-    price: 149,
-    size: "300ml",
-    tag: "Iron Boost",
-    tagBg: "bg-tertiary-container text-on-tertiary-container",
-    description:
-      "Apple-Beet-Carrot. The OG. Three ingredients, every micronutrient your body craves.",
-    ingredients: "Apple · Beetroot · Carrot · Ginger",
-    image:
-      "https://images.unsplash.com/photo-1638176067000-9e2c89f5a3f1?w=900&h=700&fit=crop&auto=format&q=80",
-    alt: "ABC Classic cold-pressed juice — apple, beetroot, carrot and ginger — iron-boost juice delivered in Ahmedabad",
-  },
-  {
-    title: "Coco-Crush",
-    category: "Juices",
-    price: 159,
-    size: "300ml",
-    tag: "Tender Coconut",
-    tagBg: "bg-primary-container text-on-primary-container",
-    description:
-      "The 100% pure daab experience. Soft tender coconut malai blended into chilled coconut water with a whisper of pink salt.",
-    ingredients: "Tender coconut water · Fresh tender coconut malai · Pink salt",
-    image:
-      "https://images.unsplash.com/photo-1575828668319-768718f23925?w=900&h=700&fit=crop&auto=format&q=80",
-    alt: "Coco-Crush — fresh tender coconut water with malai cream — Bali-style daab hydration juice delivered in Ahmedabad",
-  },
-  {
-    title: "Greens Reset",
-    category: "Juices",
-    price: 169,
-    size: "300ml",
-    tag: "Alkalising",
-    tagBg: "bg-secondary-container text-on-secondary-container",
-    description:
-      "The cleanest sip you'll have all week. Iron, chlorophyll, and a kick of ginger.",
-    ingredients: "Spinach · Cucumber · Apple · Ginger · Lemon · Mint",
-    image:
-      "https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=900&h=700&fit=crop&auto=format&q=80",
-    alt: "Greens Reset cold-pressed green juice — spinach, cucumber, apple, ginger — alkalising juice in Ahmedabad",
-  },
-];
-
-function makeItemId(item: MenuItem): string {
-  return `${item.category}::${item.title}${item.size ? `::${item.size}` : ""}`;
+function quickOrderUrl(item: MenuItem): string {
+  const sizeLabel = item.size ? ` (${item.size})` : "";
+  const message = `Hi Nothing But Healthy! I'd like to order *${item.title}${sizeLabel}* — ₹${item.price}.\n\nPlease confirm tomorrow's delivery slot and share UPI details. Thank you!`;
+  return `${WHATSAPP_URL}?text=${encodeURIComponent(message)}`;
 }
 
 function MenuCard({ item }: { item: MenuItem }) {
@@ -212,7 +41,10 @@ function MenuCard({ item }: { item: MenuItem }) {
   };
 
   return (
-    <article className="bg-surface-container-lowest rounded-[1.5rem] overflow-hidden soft-ambient-shadow group flex flex-col">
+    <article
+      id={item.slug}
+      className="bg-surface-container-lowest rounded-[1.5rem] overflow-hidden soft-ambient-shadow group flex flex-col scroll-mt-24"
+    >
       <div className="relative h-56 overflow-hidden">
         <Image
           src={item.image}
@@ -246,24 +78,45 @@ function MenuCard({ item }: { item: MenuItem }) {
         <p className="text-xs text-outline leading-relaxed mb-4 flex-1">
           {item.ingredients}
         </p>
-        <button
-          type="button"
-          onClick={handleAdd}
-          aria-label={`Add ${item.title} to order`}
-          className="w-full flex items-center justify-center gap-2 py-3 rounded-full editorial-gradient text-white font-bold text-sm active:scale-95 transition-transform cursor-pointer"
-        >
-          {inCart ? (
-            <>
-              <MaterialIcon icon="check_circle" filled size="18px" />
-              Added · {inCart.qty} in cart
-            </>
-          ) : (
-            <>
-              <MaterialIcon icon="add_shopping_cart" size="18px" />
-              Add to Order
-            </>
-          )}
-        </button>
+        <div className="grid grid-cols-[1fr_auto] gap-2">
+          <button
+            type="button"
+            onClick={handleAdd}
+            aria-label={`Add ${item.title} to order`}
+            className="flex items-center justify-center gap-2 py-3 rounded-full editorial-gradient text-white font-bold text-sm active:scale-95 transition-transform cursor-pointer"
+          >
+            {inCart ? (
+              <>
+                <MaterialIcon icon="check_circle" filled size="18px" />
+                Added · {inCart.qty}
+              </>
+            ) : (
+              <>
+                <MaterialIcon icon="add_shopping_cart" size="18px" />
+                Add to cart
+              </>
+            )}
+          </button>
+          <a
+            href={quickOrderUrl(item)}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Order ${item.title} on WhatsApp`}
+            title="Order this item directly on WhatsApp"
+            onClick={() =>
+              trackEvent("whatsapp_click", {
+                source: "menu-quick-order",
+                item: item.title,
+                value: item.price,
+              })
+            }
+            className="flex items-center justify-center w-12 rounded-full bg-[#25D366] text-white active:scale-95 transition-transform cursor-pointer hover:opacity-90"
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
+          </a>
+        </div>
       </div>
     </article>
   );
@@ -297,11 +150,58 @@ function MenuSection({ title, description, iconLabel, items }: MenuSectionProps)
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((item) => (
-            <MenuCard key={item.title} item={item} />
+            <MenuCard key={item.slug} item={item} />
           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+/** Sticky mobile checkout bar — shows once items are in the cart. Drives
+ *  cart-open conversion on phones where the small floating cart button is
+ *  easy to miss. Hidden on md+ screens (desktop has the floating cart fab). */
+function StickyCheckoutBar() {
+  const { itemCount, total, subtotal, comboDiscountActive, open, hydrated } =
+    useCart();
+  if (!hydrated || itemCount === 0) return null;
+
+  const handleClick = () => {
+    trackEvent("view_cart", {
+      source: "menu-sticky-bar",
+      subtotal,
+      value: total,
+      quantity: itemCount,
+    });
+    open();
+  };
+
+  return (
+    <div
+      role="region"
+      aria-label="Cart summary"
+      className="fixed bottom-20 left-3 right-3 z-40 md:hidden"
+    >
+      <button
+        type="button"
+        onClick={handleClick}
+        className="w-full flex items-center justify-between gap-3 bg-on-surface text-surface rounded-full pl-5 pr-2 py-2 shadow-2xl active:scale-[0.99] transition-transform cursor-pointer"
+      >
+        <span className="flex items-center gap-2 min-w-0">
+          <MaterialIcon icon="shopping_bag" filled size="20px" />
+          <span className="font-bold text-sm">
+            {itemCount} item{itemCount === 1 ? "" : "s"} · ₹{total}
+            {comboDiscountActive && (
+              <span className="opacity-70 font-normal"> · combo 15% off</span>
+            )}
+          </span>
+        </span>
+        <span className="flex items-center gap-1 px-4 py-2 rounded-full bg-primary text-on-primary text-xs font-bold shrink-0">
+          View cart
+          <MaterialIcon icon="arrow_forward" size="14px" />
+        </span>
+      </button>
+    </div>
   );
 }
 
@@ -337,8 +237,33 @@ export default function MenuContent() {
 
   return (
     <>
+      {/* Urgency / order-window strip — sets a hard deadline for tomorrow's
+          delivery, which materially lifts mobile conversion. */}
+      <section className="px-6 md:px-12 mb-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-5 py-3.5 rounded-2xl bg-tertiary-container/70 text-on-tertiary-container">
+            <div className="flex items-start sm:items-center gap-3">
+              <MaterialIcon icon="schedule" filled size="22px" className="shrink-0" />
+              <p className="text-sm leading-snug">
+                <span className="font-extrabold">Order by 6 PM today</span>{" "}
+                <span className="opacity-80">
+                  → bowls cut at 4 AM, delivered before 9 AM tomorrow across
+                  Ahmedabad.
+                </span>
+              </p>
+            </div>
+            <Link
+              href="/plans"
+              className="text-xs font-extrabold uppercase tracking-widest underline-offset-2 hover:underline shrink-0"
+            >
+              Save 20% with a monthly plan →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Search & Filter Bar */}
-      <section className="px-6 md:px-12 mb-16">
+      <section className="px-6 md:px-12 mb-12">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row gap-4 items-start sm:items-center">
           <div className="relative flex-1 w-full sm:max-w-sm">
             <MaterialIcon
@@ -467,6 +392,8 @@ export default function MenuContent() {
           </div>
         </div>
       </section>
+
+      <StickyCheckoutBar />
     </>
   );
 }

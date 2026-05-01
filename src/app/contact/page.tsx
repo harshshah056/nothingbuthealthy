@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import MaterialIcon from "@/components/ui/MaterialIcon";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import { TrackedExternalLink } from "@/components/analytics/TrackedLink";
 import {
   WHATSAPP_URL,
   WHATSAPP_DISPLAY,
@@ -257,6 +259,8 @@ export default function ContactPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(contactPageSchema) }}
       />
 
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Contact" }]} />
+
       {/* Hero */}
       <section className="px-6 md:px-12 mb-12 md:mb-20">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:p-10 items-center max-w-7xl mx-auto">
@@ -276,15 +280,14 @@ export default function ContactPage() {
               is fastest.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link
+              <TrackedExternalLink
                 href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+                eventParams={{ source: "contact-hero" }}
                 className="inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-on-primary font-bold rounded-full text-base hover:scale-105 transition-transform"
               >
                 <MaterialIcon icon="chat" filled size="20px" />
                 WhatsApp us now
-              </Link>
+              </TrackedExternalLink>
               <Link
                 href={`mailto:${COMPANY_INFO.email}`}
                 className="inline-flex items-center gap-2 px-7 py-3.5 bg-surface-container-high text-on-surface font-bold rounded-full text-base hover:bg-surface-container-highest transition-colors"
@@ -481,15 +484,14 @@ export default function ContactPage() {
               No phone trees, no ticket numbers. WhatsApp is the easiest way to
               start your fruit subscription, customise a plan, or ask anything.
             </p>
-            <Link
+            <TrackedExternalLink
               href={WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+              eventParams={{ source: "contact-bottom-cta" }}
               className="inline-flex items-center gap-3 px-10 py-5 bg-white text-primary font-bold rounded-full text-lg hover:scale-105 transition-transform shadow-2xl"
             >
               <MaterialIcon icon="chat" filled size="22px" />
               Chat on WhatsApp · {WHATSAPP_DISPLAY}
-            </Link>
+            </TrackedExternalLink>
           </div>
           <div className="absolute -top-24 -left-24 w-64 h-64 bg-tertiary/20 rounded-full blur-3xl" />
           <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-primary/30 rounded-full blur-3xl" />

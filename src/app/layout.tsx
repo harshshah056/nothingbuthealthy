@@ -8,6 +8,7 @@ import WhatsAppFAB from "@/components/layout/WhatsAppFAB";
 import CartButton from "@/components/cart/CartButton";
 import CartDrawer from "@/components/cart/CartDrawer";
 import CartToast from "@/components/cart/CartToast";
+import WelcomeBanner from "@/components/layout/WelcomeBanner";
 import { CartProvider } from "@/contexts/CartContext";
 import { SITE_URL, COMPANY_INFO, WHATSAPP_DISPLAY, INSTAGRAM_URL } from "@/utils/constants";
 
@@ -99,16 +100,32 @@ const localBusinessSchema = {
       "@type": ["FoodEstablishment", "LocalBusiness"],
       "@id": `${SITE_URL}/#business`,
       name: COMPANY_INFO.name,
+      alternateName: ["NBH", "Nothing But Healthy Ahmedabad"],
+      slogan: "Fresh & Clean Living",
       description:
-        "Ahmedabad's first daily fruit subscription service. Chef-cut, farm-fresh seasonal fruit bowls delivered to your door before 9 AM, with zero preservatives.",
+        "Ahmedabad's first daily fruit subscription service. Chef-cut, farm-fresh seasonal fruit bowls and cold-pressed juices delivered to your door before 9 AM, with zero preservatives.",
       url: SITE_URL,
       telephone: WHATSAPP_DISPLAY,
       email: COMPANY_INFO.email,
       image: `${SITE_URL}/logo.png`,
       logo: `${SITE_URL}/logo.png`,
-      priceRange: "₹₹",
+      // Concrete price band, not an opaque "₹₹". Matches lowest juice (₹79)
+      // and the most expensive bowl (₹329) on the live menu.
+      priceRange: "₹79–₹329",
+      currenciesAccepted: "INR",
+      paymentAccepted: "UPI, Cash, Credit Card, Debit Card, Bank Transfer",
       servesCuisine: ["Indian vegetarian", "Sattvic", "Vegan"],
       hasMenu: `${SITE_URL}/menu/`,
+      keywords:
+        "fruit subscription Ahmedabad, fruit bowl delivery Ahmedabad, cold-pressed juice Ahmedabad, healthy breakfast subscription, daily fruit delivery, vegetarian breakfast Ahmedabad, juice cleanse Ahmedabad",
+      knowsAbout: [
+        "Daily fruit subscription",
+        "Cold-pressed juice",
+        "Healthy breakfast",
+        "Sattvic vegetarian food",
+        "Fruit bowl catering",
+        "Bulk corporate breakfast Ahmedabad",
+      ],
       address: {
         "@type": "PostalAddress",
         addressLocality: "Ahmedabad",
@@ -121,10 +138,31 @@ const localBusinessSchema = {
         latitude: 23.0225,
         longitude: 72.5714,
       },
-      areaServed: {
-        "@type": "City",
-        name: "Ahmedabad",
-        sameAs: "https://en.wikipedia.org/wiki/Ahmedabad",
+      areaServed: [
+        { "@type": "City", name: "Ahmedabad", sameAs: "https://en.wikipedia.org/wiki/Ahmedabad" },
+        { "@type": "Place", name: "Bodakdev, Ahmedabad" },
+        { "@type": "Place", name: "Vastrapur, Ahmedabad" },
+        { "@type": "Place", name: "Satellite, Ahmedabad" },
+        { "@type": "Place", name: "SG Highway, Ahmedabad" },
+        { "@type": "Place", name: "Prahladnagar, Ahmedabad" },
+        { "@type": "Place", name: "Bopal, Ahmedabad" },
+        { "@type": "Place", name: "Thaltej, Ahmedabad" },
+        { "@type": "Place", name: "Navrangpura, Ahmedabad" },
+        { "@type": "Place", name: "CG Road, Ahmedabad" },
+        { "@type": "Place", name: "Paldi, Ahmedabad" },
+        { "@type": "Place", name: "Maninagar, Ahmedabad" },
+        { "@type": "Place", name: "Naranpura, Ahmedabad" },
+        { "@type": "Place", name: "Sabarmati, Ahmedabad" },
+        { "@type": "Place", name: "Chandkheda, Ahmedabad" },
+      ],
+      serviceArea: {
+        "@type": "GeoCircle",
+        geoMidpoint: {
+          "@type": "GeoCoordinates",
+          latitude: 23.0225,
+          longitude: 72.5714,
+        },
+        geoRadius: "20000", // 20 km radius around Ahmedabad
       },
       openingHoursSpecification: [
         {
@@ -162,6 +200,37 @@ const localBusinessSchema = {
         areaServed: "IN",
       },
     },
+    {
+      "@type": "Service",
+      "@id": `${SITE_URL}/#fruit-subscription-service`,
+      name: "Daily Fruit Bowl & Cold-Pressed Juice Subscription",
+      serviceType: "Daily fruit subscription",
+      provider: { "@id": `${SITE_URL}/#business` },
+      areaServed: {
+        "@type": "City",
+        name: "Ahmedabad",
+      },
+      audience: {
+        "@type": "PeopleAudience",
+        audienceType: "Working professionals, gym-goers, families and busy parents in Ahmedabad",
+      },
+      offers: {
+        "@type": "AggregateOffer",
+        priceCurrency: "INR",
+        lowPrice: "79",
+        highPrice: "329",
+        offerCount: "12",
+        availability: "https://schema.org/InStock",
+      },
+      hoursAvailable: [
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          opens: "06:00",
+          closes: "09:00",
+        },
+      ],
+    },
   ],
 };
 
@@ -186,15 +255,21 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-surface overflow-x-hidden">
+        <a href="#main-content" className="skip-to-content">
+          Skip to content
+        </a>
         <CartProvider>
           <Navbar />
-          <main className="pt-24 pb-32 md:pb-0">{children}</main>
+          <main id="main-content" className="pt-24 pb-32 md:pb-0">
+            {children}
+          </main>
           <Footer />
           <BottomNav />
           <WhatsAppFAB />
           <CartButton />
           <CartDrawer />
           <CartToast />
+          <WelcomeBanner />
         </CartProvider>
       </body>
     </html>

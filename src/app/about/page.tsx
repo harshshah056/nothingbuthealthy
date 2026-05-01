@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import MaterialIcon from "@/components/ui/MaterialIcon";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { SITE_URL } from "@/utils/constants";
 
 export const metadata: Metadata = {
@@ -166,6 +167,8 @@ export default function AboutPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutPageSchema) }}
       />
+
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "About" }]} />
 
       {/* Hero */}
       <section className="px-6 md:px-12 mb-16 md:mb-24">

@@ -41,6 +41,12 @@ const websiteSchema = {
     },
     {
       "@type": "FAQPage",
+      // Speakable selector helps AI answer engines (Google Assistant /
+      // Perplexity / ChatGPT browsing) extract the FAQ answers directly.
+      speakable: {
+        "@type": "SpeakableSpecification",
+        cssSelector: ["#faq", "#fruit-benefits"],
+      },
       mainEntity: [
         {
           "@type": "Question",
@@ -188,20 +194,54 @@ export default function HomePage() {
             <div className="flex flex-wrap gap-4">
               <Link
                 href="/plans"
-                className="px-8 py-4 bg-gradient-to-br from-primary to-primary-container text-white font-bold rounded-full text-lg active:scale-95 transition-transform"
+                className="px-8 py-4 bg-gradient-to-br from-primary to-primary-container text-white font-bold rounded-full text-lg active:scale-95 transition-transform inline-flex items-center gap-2"
               >
-                Start Daily Fruit Plan
+                Start 2-day trial
+                <MaterialIcon icon="arrow_forward" size="20px" />
               </Link>
               <Link
                 href="/menu"
                 className="px-8 py-4 bg-secondary-container text-on-secondary-container font-bold rounded-full text-lg active:scale-95 transition-transform"
               >
-                See Today&apos;s Bowl
+                See today&apos;s bowl
               </Link>
             </div>
             <p className="text-xs text-outline mt-6 uppercase tracking-widest">
-              From ₹125/day · Pause or cancel anytime
+              From ₹99/day · Pause or cancel anytime · No auto-renew
             </p>
+
+            {/* Trust strip — concrete proof points placed above the fold so
+                first-time visitors get social proof + reassurance instantly. */}
+            <ul className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8 max-w-md">
+              <li className="flex items-center gap-2">
+                <MaterialIcon icon="bolt" filled size="18px" className="text-primary shrink-0" />
+                <span className="text-xs leading-tight">
+                  <strong className="block text-sm">12k+</strong>
+                  <span className="text-on-surface-variant">bowls served</span>
+                </span>
+              </li>
+              <li className="flex items-center gap-2">
+                <MaterialIcon icon="location_on" filled size="18px" className="text-primary shrink-0" />
+                <span className="text-xs leading-tight">
+                  <strong className="block text-sm">30+ areas</strong>
+                  <span className="text-on-surface-variant">in Ahmedabad</span>
+                </span>
+              </li>
+              <li className="flex items-center gap-2">
+                <MaterialIcon icon="eco" filled size="18px" className="text-primary shrink-0" />
+                <span className="text-xs leading-tight">
+                  <strong className="block text-sm">100% veg</strong>
+                  <span className="text-on-surface-variant">no preservatives</span>
+                </span>
+              </li>
+              <li className="flex items-center gap-2">
+                <MaterialIcon icon="schedule" filled size="18px" className="text-primary shrink-0" />
+                <span className="text-xs leading-tight">
+                  <strong className="block text-sm">Before 9 AM</strong>
+                  <span className="text-on-surface-variant">every morning</span>
+                </span>
+              </li>
+            </ul>
           </div>
           <div className="md:col-span-6 relative h-[380px] sm:h-[500px] md:h-[700px]">
             <div className="absolute inset-0 bg-primary-fixed rounded-[2rem] -rotate-3 translate-x-4 translate-y-4" />
@@ -278,7 +318,10 @@ export default function HomePage() {
       </section>
 
       {/* 6 Benefits of Daily Fruit */}
-      <section className="py-16 md:py-24 px-6 md:px-12 bg-surface">
+      <section
+        id="fruit-benefits"
+        className="py-16 md:py-24 px-6 md:px-12 bg-surface scroll-mt-24"
+      >
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4">
             <div>
@@ -521,7 +564,10 @@ export default function HomePage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 md:py-24 px-6 md:px-12 bg-surface">
+      <section
+        id="faq"
+        className="py-16 md:py-24 px-6 md:px-12 bg-surface scroll-mt-24"
+      >
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-primary font-bold uppercase text-[12px] tracking-widest mb-4">

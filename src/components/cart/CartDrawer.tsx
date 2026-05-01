@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import MaterialIcon from "@/components/ui/MaterialIcon";
 import { useCart } from "@/contexts/CartContext";
 import { WHATSAPP_URL } from "@/utils/constants";
+import { trackEvent } from "@/utils/analytics";
 
 function getTomorrowISO(): string {
   const d = new Date();
@@ -115,6 +117,19 @@ export default function CartDrawer() {
 
   const handleCheckout = () => {
     if (!canCheckout) return;
+    trackEvent("begin_checkout", {
+      source: "cart-drawer",
+      value: total,
+      subtotal,
+      discount,
+      quantity: itemCount,
+      comboDiscount: comboDiscountActive,
+    });
+    trackEvent("whatsapp_click", {
+      source: "cart-checkout",
+      value: total,
+      quantity: itemCount,
+    });
     const message = buildWhatsAppMessage();
     const url = `${WHATSAPP_URL}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank", "noopener,noreferrer");
@@ -177,20 +192,55 @@ export default function CartDrawer() {
             <span>Save 15%: {nudgeLabel}</span>
           </div>
         )}
+        {/* Subscribe-and-save upsell — fires once the basket is meaningful
+            (≥ ₹300). Single biggest revenue lever for a delivery business:
+            convert "casual order" → "daily habit" before the user checks out. */}
+        {items.length > 0 && subtotal >= 300 && !showComboNudge && (
+          <Link
+            href="/plans"
+            onClick={close}
+            className="mx-5 mt-2 px-3 py-1.5 rounded-full bg-primary-container/70 text-on-primary-container flex items-center gap-2 text-[11px] font-bold shrink-0 hover:opacity-90 cursor-pointer"
+          >
+            <MaterialIcon icon="redeem" filled size="14px" />
+            <span className="flex-1 truncate">
+              Make this a daily habit — subscriptions save up to 20%.
+            </span>
+            <MaterialIcon icon="arrow_forward" size="14px" />
+          </Link>
+        )}
 
         {/* Items */}
         <div className="flex-1 overflow-y-auto px-5 py-3">
           {items.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-center py-20">
+            <div className="h-full flex flex-col items-center justify-center text-center py-12">
               <MaterialIcon
                 icon="shopping_bag"
                 className="text-outline-variant mb-4"
-                size="64px"
+                size="56px"
               />
               <h3 className="text-lg font-bold mb-2">Nothing here yet</h3>
-              <p className="text-on-surface-variant text-sm max-w-xs">
-                Add a fruit bowl or juice from the menu to start your order.
+              <p className="text-on-surface-variant text-sm max-w-xs mb-6">
+                Add a fruit bowl or juice from the menu to start your order —
+                or pick a daily plan and save up to 20%.
               </p>
+              <div className="flex flex-col gap-2 w-full max-w-xs">
+                <Link
+                  href="/menu"
+                  onClick={close}
+                  className="w-full py-3 rounded-full editorial-gradient text-white font-bold text-sm cursor-pointer active:scale-95 transition-transform inline-flex items-center justify-center gap-2"
+                >
+                  <MaterialIcon icon="restaurant_menu" size="18px" />
+                  Browse today&apos;s menu
+                </Link>
+                <Link
+                  href="/plans"
+                  onClick={close}
+                  className="w-full py-3 rounded-full bg-surface-container-low text-on-surface font-bold text-sm cursor-pointer active:scale-95 transition-transform inline-flex items-center justify-center gap-2 border border-outline-variant"
+                >
+                  <MaterialIcon icon="redeem" size="18px" />
+                  See daily plans
+                </Link>
+              </div>
             </div>
           ) : (
             <ul className="space-y-2">

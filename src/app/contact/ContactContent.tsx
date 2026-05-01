@@ -3,6 +3,7 @@
 import { useState } from "react";
 import MaterialIcon from "@/components/ui/MaterialIcon";
 import { WHATSAPP_NUMBER, WHATSAPP_URL } from "@/utils/constants";
+import { trackEvent } from "@/utils/analytics";
 
 const faqs = [
   {
@@ -69,6 +70,7 @@ export default function ContactContent() {
       lines.push(message);
     }
 
+    trackEvent("whatsapp_click", { source: "contact-form" });
     const text = encodeURIComponent(lines.join("\n"));
     const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
     window.open(waUrl, "_blank", "noopener,noreferrer");
@@ -162,6 +164,9 @@ export default function ContactContent() {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() =>
+                trackEvent("whatsapp_click", { source: "contact-faq-cta" })
+              }
               className="hidden sm:flex text-primary font-bold text-sm items-center gap-1 hover:underline"
             >
               Ask on WhatsApp

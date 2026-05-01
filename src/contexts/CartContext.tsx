@@ -9,6 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { trackEvent } from "@/utils/analytics";
 
 const STORAGE_KEY = "nbh-cart-v1";
 
@@ -113,10 +114,28 @@ export function CartProvider({ children }: { children: ReactNode }) {
       qty: nextQty,
       nonce: (prev?.nonce ?? 0) + 1,
     }));
+    trackEvent("add_to_cart", {
+      item: item.title,
+      value: item.price,
+      quantity: 1,
+      category: item.category,
+    });
   }, []);
 
   const removeItem = useCallback((id: string) => {
-    setItems((current) => current.filter((i) => i.id !== id));
+    let removedTitle: string | undefined;
+    let removedValue: number | undefined;
+    setItems((current) => {
+      const target = current.find((i) => i.id === id);
+      if (target) {
+        removedTitle = target.title;
+        removedValue = target.price * target.qty;
+      }
+      return current.filter((i) => i.id !== id);
+    });
+    if (removedTitle) {
+      trackEvent("remove_from_cart", { item: removedTitle, value: removedValue });
+    }
   }, []);
 
   const updateQty = useCallback((id: string, qty: number) => {

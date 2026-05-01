@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { SITE_URL } from "@/utils/constants";
+import Link from "next/link";
+import { SITE_URL, COMPANY_INFO } from "@/utils/constants";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import MenuContent from "./MenuContent";
+import { allMenuItems, fruitBowls, juices, type MenuItem } from "./menuData";
 
 export const metadata: Metadata = {
   title: "Menu – Fresh Fruit Bowls & Cold-Pressed Juices in Ahmedabad",
@@ -11,30 +14,62 @@ export const metadata: Metadata = {
     canonical: `${SITE_URL}/menu/`,
   },
   openGraph: {
-    title: "Menu – Fruit Bowls & Cold-Pressed Juices | Nothing But Healthy Ahmedabad",
+    title:
+      "Menu – Fruit Bowls & Cold-Pressed Juices | Nothing But Healthy Ahmedabad",
     description:
       "6 signature fruit bowls + 6 cold-pressed juices. Hand-cut every morning at 4 AM in our Ahmedabad kitchen. Pair a bowl with a juice and save 15%.",
     url: `${SITE_URL}/menu/`,
   },
 };
 
-const fruitBowlItems = [
-  { name: "Watermelon Cooler", description: "Watermelon, muskmelon, basil seeds, mint and lime. Hydrating summer hero.", price: "179" },
-  { name: "Desi Sunrise Bowl", description: "Banana, papaya, pomegranate, guava and chia seeds. Built on Gujarat-grown produce.", price: "199" },
-  { name: "Protein Power Bowl", description: "Banana, peanut butter, granola, chia and almond milk. Built for gym mornings.", price: "259" },
-  { name: "Alphonso Bliss", description: "Hand-picked Valsad alphonsos with almonds, pistachio, cardamom and honey.", price: "279" },
-  { name: "The Berry Zenith", description: "Strawberry, blueberry, acai, chia seeds, honey and coconut. Antioxidant medley.", price: "299" },
-  { name: "The Antioxidant Stack", description: "Blueberry, pomegranate, kiwi, walnut and flax seeds. Polyphenol powerhouse.", price: "329" },
-];
+const itemUrl = (item: MenuItem) => `${SITE_URL}/menu/#${item.slug}`;
 
-const juiceItems = [
-  { name: "Immunity Shot", description: "Ginger, turmeric, lemon, black pepper and cayenne. 60ml of concentrated firepower.", price: "79", size: "60ml" },
-  { name: "Watermelon Mint", description: "Watermelon, mint, lemon and pink salt. Pure summer hydration.", price: "129", size: "300ml" },
-  { name: "Coco-Cane", description: "Cold-pressed sugarcane blended with tender coconut water, lemon and ginger. Gujarati summer cooler reborn.", price: "139", size: "300ml" },
-  { name: "ABC Classic", description: "Apple, beetroot, carrot and ginger. The OG three-ingredient powerhouse.", price: "149", size: "300ml" },
-  { name: "Coco-Crush", description: "Tender coconut water blended with fresh coconut malai and pink salt. The 100% pure daab experience.", price: "159", size: "300ml" },
-  { name: "Greens Reset", description: "Spinach, cucumber, apple, ginger, lemon and mint. Iron-rich and alkalising.", price: "169", size: "300ml" },
-];
+const productOf = (item: MenuItem) => ({
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "@id": itemUrl(item),
+  name: item.title,
+  description: item.description,
+  image: item.image,
+  brand: {
+    "@type": "Brand",
+    name: COMPANY_INFO.name,
+  },
+  category: item.category,
+  url: itemUrl(item),
+  ...(item.size && {
+    additionalProperty: [
+      {
+        "@type": "PropertyValue",
+        name: "Serving size",
+        value: item.size,
+      },
+    ],
+  }),
+  offers: {
+    "@type": "Offer",
+    price: item.price,
+    priceCurrency: "INR",
+    availability: "https://schema.org/InStock",
+    url: itemUrl(item),
+    seller: {
+      "@type": "Organization",
+      name: COMPANY_INFO.name,
+      url: SITE_URL,
+    },
+    areaServed: {
+      "@type": "City",
+      name: COMPANY_INFO.city,
+    },
+    priceValidUntil: "2099-12-31",
+    deliveryLeadTime: {
+      "@type": "QuantitativeValue",
+      minValue: 1,
+      maxValue: 1,
+      unitCode: "DAY",
+    },
+  },
+});
 
 const menuSchema = {
   "@context": "https://schema.org",
@@ -49,9 +84,9 @@ const menuSchema = {
       name: "Signature Fruit Bowls",
       description:
         "Six curated fruit bowls hand-cut every morning at 4 AM in our Ahmedabad kitchen. Sourced from farms across Gujarat.",
-      hasMenuItem: fruitBowlItems.map((item) => ({
+      hasMenuItem: fruitBowls.map((item) => ({
         "@type": "MenuItem",
-        name: item.name,
+        name: item.title,
         description: item.description,
         offers: {
           "@type": "Offer",
@@ -67,9 +102,9 @@ const menuSchema = {
       name: "Cold-Pressed Juices",
       description:
         "Six curated cold-pressed juices, slow-pressed for maximum nutrient retention. No added sugar, no preservatives, no heat treatment.",
-      hasMenuItem: juiceItems.map((item) => ({
+      hasMenuItem: juices.map((item) => ({
         "@type": "MenuItem",
-        name: item.name,
+        name: item.title,
         description: item.description,
         offers: {
           "@type": "Offer",
@@ -85,6 +120,19 @@ const menuSchema = {
       })),
     },
   ],
+};
+
+const itemListSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Daily fruit bowls and cold-pressed juices – Ahmedabad",
+  numberOfItems: allMenuItems.length,
+  itemListElement: allMenuItems.map((item, idx) => ({
+    "@type": "ListItem",
+    position: idx + 1,
+    url: itemUrl(item),
+    item: productOf(item),
+  })),
 };
 
 const breadcrumbSchema = {
@@ -115,11 +163,17 @@ export default function MenuPage() {
       />
       <script
         type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+      <script
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Menu" }]} />
+
       {/* Hero Section */}
-      <section className="relative px-6 md:px-12 mb-16 overflow-hidden">
+      <section className="relative px-6 md:px-12 mb-10 overflow-hidden">
         <div className="max-w-7xl mx-auto flex items-end justify-between gap-8">
           <div>
             <span className="inline-block px-4 py-1.5 rounded-full bg-tertiary-container text-on-tertiary-container font-bold text-[10px] uppercase tracking-widest mb-6">
@@ -132,8 +186,15 @@ export default function MenuPage() {
             </h1>
             <p className="text-on-surface-variant text-lg max-w-xl leading-relaxed">
               Six curated fruit bowls and six cold-pressed juices — hand-cut and
-              slow-pressed every morning, delivered across Ahmedabad before
-              9 AM.
+              slow-pressed every morning, delivered across{" "}
+              <Link href="/contact" className="text-primary font-bold hover:underline">
+                30+ Ahmedabad neighbourhoods
+              </Link>{" "}
+              before 9 AM. Going daily?{" "}
+              <Link href="/plans" className="text-primary font-bold hover:underline">
+                Subscriptions save up to 20%
+              </Link>
+              .
             </p>
           </div>
           <div className="hidden md:block relative w-32 h-32 -mb-4 shrink-0">

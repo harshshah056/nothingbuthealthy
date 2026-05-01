@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import MaterialIcon from "@/components/ui/MaterialIcon";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import { TrackedExternalLink } from "@/components/analytics/TrackedLink";
 import { WHATSAPP_URL, WHATSAPP_DISPLAY, SITE_URL, COMPANY_INFO } from "@/utils/constants";
 import CorporateInquiryForm from "./CorporateInquiryForm";
 
@@ -241,6 +243,13 @@ export default function CorporatePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(corporateSchema) }}
       />
 
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Corporate & Bulk Orders" },
+        ]}
+      />
+
       {/* Hero */}
       <section className="relative px-6 md:px-12 mb-12 md:mb-20 overflow-hidden">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center max-w-7xl mx-auto">
@@ -266,17 +275,16 @@ export default function CorporatePage() {
               >
                 Get a bulk quote
               </Link>
-              <a
+              <TrackedExternalLink
                 href={`${WHATSAPP_URL}?text=${encodeURIComponent(
                   "Hi Nothing But Healthy! I'd like a bulk / corporate quote for fruit bowls and juices."
                 )}`}
-                target="_blank"
-                rel="noopener noreferrer"
+                eventParams={{ source: "corporate-hero" }}
                 className="px-8 py-4 border-2 border-primary text-primary font-bold rounded-full text-lg active:scale-95 transition-all hover:bg-primary hover:text-on-primary inline-flex items-center gap-2"
               >
                 <MaterialIcon icon="chat" filled size="18px" />
                 WhatsApp us
-              </a>
+              </TrackedExternalLink>
             </div>
           </div>
 
@@ -621,14 +629,13 @@ export default function CorporatePage() {
                   <p className="text-xs uppercase tracking-widest text-on-surface-variant mb-0.5">
                     WhatsApp (fastest)
                   </p>
-                  <a
+                  <TrackedExternalLink
                     href={WHATSAPP_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    eventParams={{ source: "corporate-contact-card" }}
                     className="font-bold text-on-surface hover:text-primary transition-colors"
                   >
                     {WHATSAPP_DISPLAY}
-                  </a>
+                  </TrackedExternalLink>
                 </div>
               </div>
 
@@ -672,17 +679,17 @@ export default function CorporatePage() {
                 Skip the form and message our team directly on WhatsApp — pre-filled
                 bulk-order template included.
               </p>
-              <a
+              <TrackedExternalLink
                 href={`${WHATSAPP_URL}?text=${encodeURIComponent(
                   "Hi Nothing But Healthy! I'd like a bulk / corporate quote.\n\nOrder type: \nVolume: \nFrequency: \nLocation in Ahmedabad: \n\nPlease share pricing. Thank you!"
                 )}`}
-                target="_blank"
-                rel="noopener noreferrer"
+                eventName="corporate_inquiry"
+                eventParams={{ source: "corporate-template" }}
                 className="mt-3 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-on-secondary-container text-secondary-container font-bold text-sm cursor-pointer"
               >
                 <MaterialIcon icon="chat" filled size="16px" />
                 Open WhatsApp template
-              </a>
+              </TrackedExternalLink>
             </div>
           </div>
 

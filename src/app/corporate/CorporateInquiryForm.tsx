@@ -3,6 +3,7 @@
 import { useState } from "react";
 import MaterialIcon from "@/components/ui/MaterialIcon";
 import { WHATSAPP_NUMBER } from "@/utils/constants";
+import { trackEvent } from "@/utils/analytics";
 
 const orderTypes = [
   "Office daily breakfast",
@@ -76,6 +77,17 @@ export default function CorporateInquiryForm() {
     }
     lines.push("");
     lines.push("Please share pricing and the next steps. Thank you!");
+
+    trackEvent("corporate_inquiry", {
+      source: "corporate-form",
+      orderType: orderType || undefined,
+      volume: volume || undefined,
+      frequency: frequency || undefined,
+    });
+    trackEvent("whatsapp_click", {
+      source: "corporate-form",
+      orderType: orderType || undefined,
+    });
 
     const text = encodeURIComponent(lines.join("\n"));
     const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;

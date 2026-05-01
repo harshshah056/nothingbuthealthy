@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import MaterialIcon from "@/components/ui/MaterialIcon";
 import { WHATSAPP_URL } from "@/utils/constants";
+import { trackEvent } from "@/utils/analytics";
 
 type Track = "Fruit Bowls" | "Juices" | "Combo";
 
@@ -247,6 +248,14 @@ function PlanCard({ plan }: { plan: Plan }) {
         href={whatsappLink(plan.whatsappMessage)}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() =>
+          trackEvent("subscribe_intent", {
+            source: "plan-card",
+            item: plan.name,
+            value: Number(plan.pricePerUnit),
+            duration: plan.duration,
+          })
+        }
         className="flex items-center justify-center gap-2 editorial-gradient text-white font-bold py-3.5 rounded-full hover:opacity-90 transition-opacity"
       >
         <MaterialIcon icon="chat" filled size="18px" />
@@ -259,9 +268,26 @@ function PlanCard({ plan }: { plan: Plan }) {
   );
 }
 
+// Savings copy shown above each track's plan cards. Concrete numbers help
+// shoppers anchor on the value of going monthly vs single orders.
+const trackSavings: Record<Track, string> = {
+  "Fruit Bowls":
+    "Going monthly saves ₹780 / month vs single bowls (₹3,094 vs ₹3,874).",
+  Juices:
+    "Going monthly saves ₹520 / month vs single juices (₹2,054 vs ₹2,574).",
+  Combo:
+    "The Combo monthly saves ₹752 vs running separate bowl + juice plans.",
+};
+
 export default function PlanTabs() {
   const [activeTrack, setActiveTrack] = useState<Track>("Fruit Bowls");
   const trackData = tracks[activeTrack];
+
+  // The mobile sticky CTA links to the *featured* plan's WhatsApp deep-link
+  // for the currently active track — i.e. one tap to start the most popular
+  // option, no need to scroll the cards.
+  const featuredPlan =
+    trackData.plans.find((p) => p.featured) ?? trackData.plans[0];
 
   return (
     <section
@@ -286,7 +312,7 @@ export default function PlanTabs() {
         <div
           role="tablist"
           aria-label="Plan track"
-          className="flex justify-center mb-14"
+          className="flex justify-center mb-10"
         >
           <div className="inline-flex bg-surface-container rounded-full p-1.5 gap-1 flex-wrap justify-center">
             {(Object.keys(tracks) as Track[]).map((track) => (
@@ -308,11 +334,18 @@ export default function PlanTabs() {
           </div>
         </div>
 
+        {/* Savings strip — concrete monetary delta, central to subscription
+            conversion. */}
+        <div className="max-w-2xl mx-auto mb-10 flex items-center gap-3 px-4 py-3 rounded-full bg-tertiary-container/60 text-on-tertiary-container text-xs sm:text-sm font-bold">
+          <MaterialIcon icon="savings" filled size="18px" className="shrink-0" />
+          <span className="leading-snug">{trackSavings[activeTrack]}</span>
+        </div>
+
         <p className="text-center text-on-surface-variant max-w-xl mx-auto mb-12">
           {trackData.copy}
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center pb-20 md:pb-0">
           {trackData.plans.map((plan) => (
             <PlanCard key={`${activeTrack}-${plan.name}`} plan={plan} />
           ))}
@@ -322,6 +355,35 @@ export default function PlanTabs() {
           All plans include carbon-neutral delivery, compostable packaging, and
           a free quarterly health check-in. GST included where applicable.
         </p>
+      </div>
+
+      {/* Sticky mobile CTA — converts the most-popular plan with one tap.
+          Hidden on md+ where the featured card is fully visible. */}
+      <div className="fixed inset-x-3 bottom-20 z-40 md:hidden">
+        <Link
+          href={whatsappLink(featuredPlan.whatsappMessage)}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() =>
+            trackEvent("subscribe_intent", {
+              source: "plans-sticky-mobile",
+              item: featuredPlan.name,
+              value: Number(featuredPlan.pricePerUnit),
+              track: activeTrack,
+            })
+          }
+          className="w-full flex items-center justify-between gap-3 bg-[#25D366] text-white rounded-full pl-5 pr-2 py-2 shadow-2xl active:scale-[0.99] transition-transform cursor-pointer"
+        >
+          <span className="flex items-center gap-2 min-w-0">
+            <MaterialIcon icon="chat" filled size="20px" />
+            <span className="font-bold text-sm truncate">
+              Start {activeTrack.toLowerCase()} on WhatsApp
+            </span>
+          </span>
+          <span className="px-3 py-1.5 rounded-full bg-white text-[#25D366] text-xs font-extrabold shrink-0">
+            ₹{featuredPlan.pricePerUnit}/{featuredPlan.unit}
+          </span>
+        </Link>
       </div>
     </section>
   );

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import MaterialIcon from "@/components/ui/MaterialIcon";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import { TrackedExternalLink } from "@/components/analytics/TrackedLink";
 import { WHATSAPP_URL, SITE_URL } from "@/utils/constants";
 import PlanTabs from "./PlanTabs";
 
@@ -162,6 +164,11 @@ const plansSchema = {
     },
     {
       "@type": "FAQPage",
+      // Lets AI answer engines speak the FAQ aloud / quote it directly.
+      speakable: {
+        "@type": "SpeakableSpecification",
+        cssSelector: ["#faq"],
+      },
       mainEntity: [
         {
           "@type": "Question",
@@ -232,6 +239,8 @@ export default function PlansPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(plansSchema) }}
       />
 
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Plans" }]} />
+
       {/* Hero */}
       <section className="relative px-6 md:px-12 mb-20 overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center max-w-7xl mx-auto">
@@ -246,26 +255,37 @@ export default function PlansPage() {
             <p className="text-on-surface-variant text-lg max-w-md mb-10 leading-relaxed">
               Pick a 2-day trial, a weekly habit, or a full monthly programme.
               Three tracks, nine plans — every one of them ends with a fresh
-              bowl or juice at your Ahmedabad door before 9 AM.
+              bowl or juice at your Ahmedabad door before 9 AM. New here?{" "}
+              <Link href="/menu" className="text-primary font-bold hover:underline">
+                Browse today&apos;s menu
+              </Link>{" "}
+              or{" "}
+              <Link href="/contact" className="text-primary font-bold hover:underline">
+                check delivery zones
+              </Link>{" "}
+              first.
             </p>
 
             <div className="flex flex-wrap gap-4">
               <Link
                 href="#pricing"
-                className="px-8 py-4 bg-gradient-to-br from-primary to-primary-container text-white font-bold rounded-full text-lg active:scale-95 transition-transform"
+                className="px-8 py-4 bg-gradient-to-br from-primary to-primary-container text-white font-bold rounded-full text-lg active:scale-95 transition-transform inline-flex items-center gap-2"
               >
-                See Plans
+                See plans
+                <MaterialIcon icon="arrow_downward" size="20px" />
               </Link>
-              <Link
+              <TrackedExternalLink
                 href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+                eventParams={{ source: "plans-hero" }}
                 className="inline-flex items-center gap-2 px-8 py-4 bg-secondary-container text-on-secondary-container font-bold rounded-full text-lg active:scale-95 transition-transform"
               >
                 <MaterialIcon icon="chat" filled size="20px" />
-                WhatsApp Us
-              </Link>
+                WhatsApp us
+              </TrackedExternalLink>
             </div>
+            <p className="text-xs text-outline mt-6 uppercase tracking-widest">
+              Pause or cancel anytime · No lock-in · Free delivery in Ahmedabad
+            </p>
           </div>
 
           <div className="md:col-span-6 relative h-[380px] sm:h-[500px] md:h-[700px]">
@@ -372,7 +392,10 @@ export default function PlansPage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-16 md:py-24 px-6 md:px-12 bg-surface-container-low">
+      <section
+        id="faq"
+        className="py-16 md:py-24 px-6 md:px-12 bg-surface-container-low scroll-mt-24"
+      >
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-primary font-bold uppercase text-[12px] tracking-widest mb-4">
@@ -500,17 +523,21 @@ export default function PlansPage() {
               commitment, no auto-renew. Taste the difference before you
               subscribe.
             </p>
-            <Link
+            <TrackedExternalLink
               href={`${WHATSAPP_URL}?text=${encodeURIComponent(
                 "Hi Nothing But Healthy! I'd like to start the *Juice 2-Day Trial* (₹99/serve, ₹198 total). Please help me get set up."
               )}`}
-              target="_blank"
-              rel="noopener noreferrer"
+              eventName="subscribe_intent"
+              eventParams={{
+                source: "plans-trial-cta",
+                item: "Juice 2-Day Trial",
+                value: 99,
+              }}
               className="inline-flex items-center gap-2 bg-white text-primary px-10 py-5 rounded-full font-black text-lg shadow-xl hover:scale-105 transition-transform"
             >
               <MaterialIcon icon="chat" filled size="22px" />
               Start My Healthy Life
-            </Link>
+            </TrackedExternalLink>
           </div>
           <div className="absolute -top-24 -left-24 w-64 h-64 bg-tertiary/20 rounded-full blur-3xl" />
           <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-primary/30 rounded-full blur-3xl" />
